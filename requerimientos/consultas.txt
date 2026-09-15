@@ -1,0 +1,678 @@
+<html lang="es" data-lt-installed="true"><head><style>body {transition: opacity ease-in 0.2s; } 
+body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } 
+</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva Consulta</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        * {
+            margin: 0;
+        }
+        .sidebar {
+            width: 240px;
+            background: #1a2537;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding-top: 30px;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.07);
+            min-height: 100vh;
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.3em;
+            letter-spacing: 1px;
+            color: #4fc3f7;
+        }
+        .sidebar nav {
+            flex: 1;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        .sidebar li {
+            margin-bottom: 0;
+        }
+        .sidebar details {
+            background: none;
+            border: none;
+            color: inherit;
+            width: 100%;
+        }
+        .sidebar summary {
+            cursor: pointer;
+            padding: 16px 24px;
+            font-size: 1.1em;
+            font-weight: 500;
+            border-radius: 0;
+            transition: background 0.2s;
+            outline: none;
+            border-bottom: 1px solid #22325a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            list-style: none;
+        }
+        .sidebar summary .material-icons {
+            font-size: 1.3em;
+            vertical-align: middle;
+        }
+        .sidebar summary::-webkit-details-marker {
+            display: none;
+        }
+        .sidebar summary:after {
+            content: 'expand_more';
+            font-family: 'Material Icons';
+            margin-left: auto;
+            transition: transform 0.2s;
+        }
+        .sidebar details[open] > summary:after {
+            transform: rotate(180deg);
+        }
+        .sidebar summary:hover,
+        .sidebar details[open] > summary {
+            background: #22325a;
+        }
+        .sidebar .submenu {
+            padding-left: 40px;
+            background: #22325a;
+        }
+        .sidebar .submenu a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 0;
+            font-size: 1em;
+            transition: color 0.2s;
+        }
+        .sidebar .submenu a:hover {
+            color: #4fc3f7;
+        }
+        .main-content {
+            flex: 1;
+            background: #f4f6f8;
+            padding: 40px 50px;
+            min-height: 100vh;
+        }
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            padding: 0 40px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .logout-link {
+            margin-left: auto;
+        }
+        .logout-link a {
+            color: #fff;
+            text-decoration: none;
+            background: #c0392b;
+            padding: 10px 30px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .logout-link a:hover {
+            background: #e74c3c;
+        }
+        .user-info-header {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-right: 30px;
+            font-size: 1em;
+            color: #1a2537;
+        }
+        .user-info-header span {
+            font-weight: 500;
+        }
+        .user-info-header .cargo {
+            font-size: 0.95em;
+            color: #4fc3f7;
+        }
+        .user-info-header .nivel-acceso {
+            background: #e3e7ed;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-size: 0.95em;
+            margin-top: 2px;
+        }
+        h1 {
+            color: #1a2537;
+            margin-bottom: 20px;
+        }
+        .form-consulta {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            padding: 30px 40px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .form-consulta label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #1a2537;
+        }
+        .form-consulta input,
+        .form-consulta textarea {
+            width: 100%;
+            padding: 8px 10px;
+            margin-bottom: 18px;
+            border: 1px solid #e3e7ed;
+            border-radius: 5px;
+            font-size: 1em;
+            background: #f4f6f8;
+        }
+        .form-consulta textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .btn-registrar {
+            display: block;
+            margin: 32px auto 0 auto;
+            background: linear-gradient(90deg, #1976d2 0%, #4fc3f7 100%);
+            color: #fff;
+            border: none;
+            padding: 14px 38px;
+            border-radius: 10px;
+            font-size: 1.13em;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(30,40,60,0.10);
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        .btn-registrar:hover {
+            background: #1256a3;
+            color: #fff;
+            box-shadow: 0 4px 18px rgba(25,118,210,0.15);
+        }
+        .mensaje {
+            background: #e3e7ed;
+            color: #1a2537;
+            border-radius: 5px;
+            padding: 10px 18px;
+            margin-bottom: 18px;
+            text-align: center;
+            font-weight: 600;
+        }
+    body {
+        display: flex;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f4f6f8;
+        margin: 0;
+    }
+        .sidebar {
+            width: 240px;
+            background: #1a2537;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding-top: 30px;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.07);
+            min-height: 100vh;
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.3em;
+            letter-spacing: 1px;
+            color: #4fc3f7;
+        }
+        .sidebar nav {
+            flex: 1;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        .sidebar li {
+            margin-bottom: 0;
+        }
+        .sidebar details {
+            background: none;
+            border: none;
+            color: inherit;
+            width: 100%;
+        }
+        .sidebar summary {
+            cursor: pointer;
+            padding: 16px 24px;
+            font-size: 1.1em;
+            font-weight: 500;
+            border-radius: 0;
+            transition: background 0.2s;
+            outline: none;
+            border-bottom: 1px solid #22325a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            list-style: none;
+        }
+        .sidebar summary .material-icons {
+            font-size: 1.3em;
+            vertical-align: middle;
+        }
+        .sidebar summary::-webkit-details-marker {
+            display: none;
+        }
+        .sidebar summary:after {
+            content: 'expand_more';
+            font-family: 'Material Icons';
+            margin-left: auto;
+            transition: transform 0.2s;
+        }
+        .sidebar details[open] > summary:after {
+            transform: rotate(180deg);
+        }
+        .sidebar summary:hover,
+        .sidebar details[open] > summary {
+            background: #22325a;
+        }
+        .sidebar .submenu {
+            padding-left: 40px;
+            background: #22325a;
+        }
+        .sidebar .submenu a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 0;
+            font-size: 1em;
+            transition: color 0.2s;
+        }
+        .sidebar .submenu a:hover {
+            color: #4fc3f7;
+        }
+        .main-content {
+            flex: 1;
+            background: #f4f6f8;
+            padding: 40px 50px;
+            min-height: 100vh;
+        }
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            padding: 0 40px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .logout-link {
+            margin-left: auto;
+        }
+        .logout-link a {
+            color: #fff;
+            text-decoration: none;
+            background: #c0392b;
+            padding: 10px 30px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .logout-link a:hover {
+            background: #e74c3c;
+        }
+        .user-info-header {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-right: 30px;
+            font-size: 1em;
+            color: #1a2537;
+        }
+        .user-info-header span {
+            font-weight: 500;
+        }
+        .user-info-header .cargo {
+            font-size: 0.95em;
+            color: #4fc3f7;
+        }
+        .user-info-header .nivel-acceso {
+            background: #e3e7ed;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-size: 0.95em;
+            margin-top: 2px;
+        }
+        h1 {
+            color: #1a2537;
+            margin-bottom: 20px;
+        }
+        .form-consulta {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            padding: 30px 40px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .form-consulta label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #1a2537;
+        }
+        .form-consulta input,
+        .form-consulta textarea {
+            width: 100%;
+            padding: 8px 10px;
+            margin-bottom: 18px;
+            border: 1px solid #e3e7ed;
+            border-radius: 5px;
+            font-size: 1em;
+            background: #f4f6f8;
+        }
+        .form-consulta textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .btn-registrar {
+            display: block;
+            margin: 32px auto 0 auto;
+            background: linear-gradient(90deg, #1976d2 0%, #4fc3f7 100%);
+            color: #fff;
+            border: none;
+            padding: 14px 38px;
+            border-radius: 10px;
+            font-size: 1.13em;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(30,40,60,0.10);
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        .btn-registrar:hover {
+            background: #1256a3;
+            color: #fff;
+            box-shadow: 0 4px 18px rgba(25,118,210,0.15);
+        }
+        .mensaje {
+            background: #e3e7ed;
+            color: #1a2537;
+            border-radius: 5px;
+            padding: 10px 18px;
+            margin-bottom: 18px;
+            text-align: center;
+            font-weight: 600;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const details = document.querySelectorAll('.sidebar details');
+            details.forEach((targetDetail) => {
+                targetDetail.addEventListener('toggle', () => {
+                    if (targetDetail.open) {
+                        details.forEach((detail) => {
+                            if (detail !== targetDetail) {
+                                detail.open = false;
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<aside class="sidebar">
+        <h2><a href="dashboard.php" style="color:inherit;text-decoration:none;">Panel General</a></h2>
+        <nav>
+            <ul>
+                                <li>
+                    <details>
+                        <summary><span class="material-icons">assignment_ind</span>Personal</summary>
+                        <div class="submenu">
+                            <a href="personal.php"> Ver Personal</a>
+                            <a href="agragar_pp.php"> Agregar Personal</a>
+                            <a href="contactos.php"> Contactos</a>
+                        </div>
+                    </details>
+                </li>
+                                                <li>
+                    <details>
+                        <summary><span class="material-icons">assignment</span>Consultas</summary>
+                        <div class="submenu">
+                            <a href="consultas.php"> Ver consulta</a>
+                            <a href="nueva_consulta.php"> Nueva consulta</a>
+                            <a href="consultas_cerradas.php"> Consultas Cerradas</a>
+                        </div>
+                    </details>
+                </li>
+                                                <li>
+                
+                    <details>
+                        <summary><span class="material-icons">person</span>Cliente Ejecutivo</summary>
+                        <div class="submenu">
+                            <a href="ver_clientes.php"> Ver Cliente Ejecutivo</a>
+                            <a href="procesos_cerrados.php"> Procesos Cerrados</a>
+                        </div>
+                    </details>
+                </li>
+                                                <li>
+                    <details>
+                        <summary><span class="material-icons">payments</span>Pagos</summary>
+                        <div class="submenu">
+                            <a href="ver_pagos.php"> Ver Pagos</a>
+                            <a href="nuevo_pago.php"> Registrar Pago</a>
+                        </div>
+                    </details>
+                </li>
+                                                <li>
+                    <details>
+                        <summary><span class="material-icons">event</span>Agenda</summary>
+                        <div class="submenu">
+                            <a href="agenda.php"> Ver Agenda</a>
+                        </div>
+                    </details>
+                </li>
+                <li>
+                    <details>
+                        <summary><span class="material-icons">call</span> Llamadas</summary>
+                        <div class="submenu">
+                            <a href="llamadas.php"> Llamadas Diarias</a>
+                            <a href="llamadas_pendientes.php"> Llamadas Pendientes</a>
+                            <a href="llamadas_futuras.php"> Llamadas Futuras</a>
+                            <a href="todas_las_llamadas.php"> LLamadas Cerradas</a>
+                        </div>
+                    </details>
+                </li>
+                
+
+                                <li>
+                    <details>
+                        <summary><span class="material-icons">bar_chart</span>Estadísticas</summary>
+                        <div class="submenu">
+                            <a href="estadisticas.php"> Ver Estadísticas</a>
+                        </div>
+                    </details>
+                </li>
+                            </ul>
+        </nav>
+    </aside>
+
+    <div class="main-content">
+        <div class="main-header">
+            <div class="user-info-header">
+                <span>Ernesto  Arancibia Yapura</span>
+                <span class="cargo">Representante Legal</span>
+                <span class="nivel-acceso">Nivel: MASTER</span>
+            </div>
+            <div class="logout-link">
+                <a href="logout.php">Cerrar Sesión</a>
+            </div>
+        </div>
+        <h1>Nueva consulta</h1>
+                <a href="consultas.php" style="margin-bottom:18px;background:#757575;color:#fff;padding:8px 22px;border-radius:8px;text-decoration:none;font-weight:600;box-shadow:0 2px 8px #e3e7ed;float:right;">
+            <span class="material-icons" style="vertical-align:middle;font-size:1.1em;">arrow_back</span> Regresar
+        </a>
+        <div style="clear:both;"></div>
+        <form method="post" class="form-consulta">
+            <label for="fecha_con">Fecha y Hora de consulta</label>
+                                        <input type="datetime-local" name="fecha_con" id="fecha_con" value="2026-09-07T12:12" required="">
+                        <label for="nombres_con">Nombres</label>
+            <input type="text" name="nombres_con" id="nombres_con" required="">
+
+            <label for="ap_pat">Apellido Paterno</label>
+            <input type="text" name="ap_pat" id="ap_pat" required="">
+
+            <label for="ap_mat">Apellido Materno</label>
+            <input type="text" name="ap_mat" id="ap_mat" required="">
+
+            <label for="telf">Teléfono (solo números)</label>
+            <input type="tel" name="telf" id="telf" required="" inputmode="numeric" pattern="\d*" maxlength="30">
+
+            <label for="whatsapp">WhatsApp (solo números, opcional '+' al inicio)</label>
+            <input type="tel" name="whatsapp" id="whatsapp" inputmode="tel" pattern="^\+?\d*$" maxlength="30">
+
+            <label for="direccion">Dirección</label>
+            <input type="text" name="direccion" id="direccion">
+
+            <label for="ciudad">Ciudad</label>
+            <input type="text" name="ciudad" id="ciudad">
+
+            <label for="provincia">Provincia</label>
+            <input type="text" name="provincia" id="provincia">
+
+            <label for="pais">País</label>
+            <input type="text" name="pais" id="pais">
+
+            <label for="correo">Correo</label>
+            <input type="email" name="correo" id="correo">
+
+            <label for="consul">Consulta</label>
+            <textarea name="consul" id="consul" required=""></textarea>
+
+            <label for="nota_interna">Nota interna</label>
+            <textarea name="nota_interna" id="nota_interna"></textarea>
+
+            <div class="form-group">
+                <label for="origen">Origen de la consulta</label>
+                <select id="origen" name="origen" required="" style="background:#f8f9fa;color:#22325a;padding:10px 14px;border-radius:8px;border:1.5px solid #e3e7ed;font-size:1em;">
+                    <option value="">Seleccione una opción</option>
+                    <option value="cliente antiguo">Cliente antiguo</option>
+                    <option value="recomendacion">Recomendación</option>
+                    <option value="espontaneamente">Espontáneamente</option>
+                    <option value="taller colegio">Taller colegio</option>
+                    <option value="psicologia">Psicología</option>
+                    <option value="pagina netley">Página Netley</option>
+                    <option value="social">Social</option>
+                    <option value="facebook">Facebook</option>
+                    <option value="tiktok">TikTok</option>
+                    <option value="messenger">Messenger</option>
+                    <option value="instagram">Instagram</option>
+                    <option value="whatsapp">Whatsapp</option>
+                    <option value="otro">Otro</option>
+                </select>
+                <input type="text" id="nombre_colegio" name="nombre_colegio" placeholder="Nombre del colegio" style="display:none;margin-top:8px;">
+                <input type="text" id="origen_otro" name="origen_otro" placeholder="Especifique el origen" style="display:none;margin-top:8px;">
+            </div>
+            <button type="submit" class="btn-registrar">Registrar consulta</button>
+        </form>
+    </div>
+    <script>
+    // Permitir que Enter avance al siguiente campo del formulario (salvo textarea y botones)
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('.form-consulta');
+        if (!form) return;
+        const sel = 'input:not([type="hidden"]):not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled])';
+
+        form.addEventListener('keydown', function (e) {
+            if (e.key !== 'Enter') return;
+            const target = e.target;
+            // dejar Enter normal en textarea y botones
+            if (target && (target.tagName.toLowerCase() === 'textarea' || target.tagName.toLowerCase() === 'button')) return;
+            // evitar submit automático
+            e.preventDefault();
+
+            const focusables = Array.from(form.querySelectorAll(sel)).filter(el => {
+                // filtrar elementos invisibles
+                return el.offsetParent !== null || el === document.activeElement;
+            });
+            let idx = focusables.indexOf(target);
+            if (idx === -1) idx = focusables.indexOf(document.activeElement);
+            const next = focusables[idx + 1];
+            if (next) {
+                next.focus();
+                try { if (next.select) next.select(); } catch(err){}
+            } else {
+                const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+                if (submitBtn) submitBtn.focus();
+            }
+        }, true);
+
+        // Mostrar campo colegio si se selecciona "taller colegio" en origen
+        const origenSel = document.getElementById('origen');
+        const colegioInput = document.getElementById('nombre_colegio');
+        const origenOtroInput = document.getElementById('origen_otro');
+        if (origenSel && colegioInput && origenOtroInput) {
+            origenSel.addEventListener('change', function() {
+                if (this.value === 'taller colegio') {
+                    colegioInput.style.display = '';
+                    colegioInput.required = true;
+                    colegioInput.focus();
+                } else {
+                    colegioInput.style.display = 'none';
+                    colegioInput.required = false;
+                    colegioInput.value = '';
+                }
+                if (this.value === 'otro') {
+                    origenOtroInput.style.display = '';
+                    origenOtroInput.required = true;
+                    origenOtroInput.focus();
+                } else {
+                    origenOtroInput.style.display = 'none';
+                    origenOtroInput.required = false;
+                    origenOtroInput.value = '';
+                }
+            });
+        }
+    });
+    // Forzar sólo dígitos en telf; permitir '+' (único, al inicio) en whatsapp
+    const elTelf = document.getElementById('telf');
+    if (elTelf) {
+        elTelf.addEventListener('input', function(){
+            const pos = this.selectionStart || 0;
+            this.value = this.value.replace(/\D/g, '');
+            try { this.setSelectionRange(pos, pos); } catch(e){}
+        });
+    }
+    const elWhats = document.getElementById('whatsapp');
+    if (elWhats) {
+        elWhats.addEventListener('input', function(){
+            const pos = this.selectionStart || 0;
+            // eliminar todo lo que no sea dígito o '+'
+            let v = this.value.replace(/[^\d+]/g, '');
+            // contar '+'; si hay más de una, mantener sólo una
+            const plusCount = (v.match(/\+/g) || []).length;
+            v = v.replace(/\+/g, '');
+            if (plusCount > 0) v = '+' + v;
+            this.value = v;
+            try { this.setSelectionRange(pos, pos); } catch(e){}
+        });
+    }
+    </script>
+ <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;630d129b4eb74fe6ad584747e959c96e&quot;,&quot;r&quot;:1,&quot;spa&quot;:2}" crossorigin="anonymous"></script>
+
+ <div style="color-scheme: unset; forced-color-adjust: unset; math-depth: unset; position-anchor: unset; text-size-adjust: unset; appearance: unset; color: unset; font: unset; font-palette: unset; font-synthesis: unset; position-area: unset; text-orientation: unset; text-rendering: unset; text-spacing-trim: unset; -webkit-font-smoothing: unset; -webkit-locale: unset; -webkit-text-orientation: unset; -webkit-writing-mode: unset; writing-mode: unset; zoom: unset; accent-color: unset; place-content: unset; place-items: unset; place-self: unset; alignment-baseline: unset; anchor-name: unset; anchor-scope: unset; animation-composition: unset; animation: unset; animation-trigger: unset; app-region: unset; aspect-ratio: unset; backdrop-filter: unset; backface-visibility: unset; background: unset; background-blend-mode: unset; baseline-shift: unset; baseline-source: unset; block-size: unset; border-block: unset; border: unset; border-radius: unset; border-collapse: unset; border-end-end-radius: unset; border-end-start-radius: unset; border-inline: unset; border-shape: unset; border-start-end-radius: unset; border-start-start-radius: unset; bottom: unset; box-decoration-break: unset; box-shadow: unset; box-sizing: unset; break-after: unset; break-before: unset; break-inside: unset; buffered-rendering: unset; caption-side: unset; caret-animation: unset; caret-color: unset; caret-shape: unset; clear: unset; clip: unset; clip-path: unset; clip-rule: unset; color-interpolation: unset; color-interpolation-filters: unset; color-rendering: unset; columns: unset; column-fill: unset; gap: unset; rule-break: unset; rule: unset; rule-inset: unset; rule-visibility-items: unset; column-span: unset; contain: unset; contain-intrinsic-block-size: unset; contain-intrinsic-size: unset; contain-intrinsic-inline-size: unset; container: unset; content: unset; content-visibility: unset; corner-shape: unset; corner-block-end-shape: unset; corner-block-start-shape: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; cursor: unset; cx: unset; cy: unset; d: unset; display: unset; dominant-baseline: unset; dynamic-range-limit: unset; empty-cells: unset; field-sizing: unset; fill: unset; fill-opacity: unset; fill-rule: unset; filter: unset; flex: unset; flex-flow: unset; flex-line-count: unset; float: unset; flood-color: unset; flood-opacity: unset; grid: unset; grid-area: unset; height: unset; hyphenate-character: unset; hyphenate-limit-chars: unset; hyphens: unset; image-orientation: unset; image-rendering: unset; initial-letter: unset; inline-size: unset; inset-block: unset; inset-inline: unset; interactivity: unset; interest-delay: unset; interpolate-size: unset; isolation: unset; letter-spacing: unset; lighting-color: unset; line-break: unset; list-style: unset; margin-block: unset; margin: unset; margin-inline: unset; marker: unset; mask: unset; mask-type: unset; math-shift: unset; math-style: unset; max-block-size: unset; max-height: unset; max-inline-size: unset; max-width: unset; min-block-size: unset; min-height: unset; min-inline-size: unset; min-width: unset; mix-blend-mode: unset; object-fit: unset; object-position: unset; object-view-box: unset; offset: unset; opacity: unset; order: unset; orphans: unset; outline: unset; outline-offset: unset; overflow-anchor: unset; overflow-block: unset; overflow-clip-margin: unset; overflow-inline: unset; overflow-wrap: unset; overflow: unset; overlay: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; overscroll-behavior: unset; padding-block: unset; padding: unset; padding-inline: unset; page: unset; page-margin-safety: unset; page-orientation: unset; paint-order: unset; perspective: unset; perspective-origin: unset; pointer-events: unset; position-try: unset; position-visibility: unset; print-color-adjust: unset; quotes: unset; r: unset; reading-flow: unset; reading-order: unset; resize: unset; right: unset; rotate: unset; ruby-align: unset; ruby-overhang: unset; ruby-position: unset; rule-overlap: unset; rx: unset; ry: unset; scale: unset; scroll-axis-lock: unset; scroll-behavior: unset; scroll-initial-target: unset; scroll-margin-block: unset; scroll-margin: unset; scroll-margin-inline: unset; scroll-marker-group: unset; scroll-padding-block: unset; scroll-padding: unset; scroll-padding-inline: unset; scroll-snap-align: unset; scroll-snap-stop: unset; scroll-snap-type: unset; scroll-target-group: unset; scroll-timeline: unset; scrollbar-color: unset; scrollbar-gutter: unset; scrollbar-width: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; shape-rendering: unset; size: unset; speak: unset; stop-color: unset; stop-opacity: unset; stroke: unset; stroke-dasharray: unset; stroke-dashoffset: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-width: unset; tab-size: unset; table-layout: unset; text-align: unset; text-align-last: unset; text-anchor: unset; text-autospace: unset; text-box: unset; text-combine-upright: unset; text-decoration: unset; text-decoration-skip-ink: unset; text-emphasis: unset; text-emphasis-position: unset; text-fit: unset; text-indent: unset; text-justify: unset; text-overflow: unset; text-shadow: unset; text-transform: unset; text-underline-offset: unset; text-underline-position: unset; text-wrap: unset; timeline-scope: unset; timeline-trigger: unset; touch-action: unset; transform: unset; transform-box: unset; transform-origin: unset; transform-style: unset; transition: unset; translate: unset; trigger-scope: unset; user-select: unset; vector-effect: unset; vertical-align: unset; view-timeline: unset; view-transition-class: unset; view-transition-group: unset; view-transition-name: unset; view-transition-scope: unset; visibility: unset; border-spacing: unset; -webkit-box-align: unset; -webkit-box-decoration-break: unset; -webkit-box-direction: unset; -webkit-box-flex: unset; -webkit-box-ordinal-group: unset; -webkit-box-orient: unset; -webkit-box-pack: unset; -webkit-box-reflect: unset; -webkit-line-break: unset; -webkit-line-clamp: unset; -webkit-mask-box-image: unset; -webkit-rtl-ordering: unset; -webkit-ruby-position: unset; -webkit-tap-highlight-color: unset; -webkit-text-combine: unset; -webkit-text-decorations-in-effect: unset; -webkit-text-fill-color: unset; -webkit-text-security: unset; -webkit-text-stroke: unset; -webkit-user-drag: unset; white-space-collapse: unset; widows: unset; width: unset; will-change: unset; window-drag: unset; word-break: unset; word-spacing: unset; x: unset; y: unset; z-index: unset; position: absolute; top: 0px; left: 0px;"><div style="color-scheme: unset; forced-color-adjust: unset; math-depth: unset; position-anchor: unset; text-size-adjust: unset; appearance: unset; color: unset; font: unset; font-palette: unset; font-synthesis: unset; position-area: unset; text-orientation: unset; text-rendering: unset; text-spacing-trim: unset; -webkit-font-smoothing: unset; -webkit-locale: unset; -webkit-text-orientation: unset; -webkit-writing-mode: unset; writing-mode: unset; zoom: unset; accent-color: unset; place-content: unset; place-items: unset; place-self: unset; alignment-baseline: unset; anchor-name: unset; anchor-scope: unset; animation-composition: unset; animation: unset; animation-trigger: unset; app-region: unset; aspect-ratio: unset; backdrop-filter: unset; backface-visibility: unset; background: unset; background-blend-mode: unset; baseline-shift: unset; baseline-source: unset; block-size: unset; border-block: unset; border: unset; border-radius: unset; border-collapse: unset; border-end-end-radius: unset; border-end-start-radius: unset; border-inline: unset; border-shape: unset; border-start-end-radius: unset; border-start-start-radius: unset; bottom: unset; box-decoration-break: unset; box-shadow: unset; box-sizing: unset; break-after: unset; break-before: unset; break-inside: unset; buffered-rendering: unset; caption-side: unset; caret-animation: unset; caret-color: unset; caret-shape: unset; clear: unset; clip: unset; clip-path: unset; clip-rule: unset; color-interpolation: unset; color-interpolation-filters: unset; color-rendering: unset; columns: unset; column-fill: unset; gap: unset; rule-break: unset; rule: unset; rule-inset: unset; rule-visibility-items: unset; column-span: unset; contain: unset; contain-intrinsic-block-size: unset; contain-intrinsic-size: unset; contain-intrinsic-inline-size: unset; container: unset; content: unset; content-visibility: unset; corner-shape: unset; corner-block-end-shape: unset; corner-block-start-shape: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; cursor: unset; cx: unset; cy: unset; d: unset; display: unset; dominant-baseline: unset; dynamic-range-limit: unset; empty-cells: unset; field-sizing: unset; fill: unset; fill-opacity: unset; fill-rule: unset; filter: unset; flex: unset; flex-flow: unset; flex-line-count: unset; float: unset; flood-color: unset; flood-opacity: unset; grid: unset; grid-area: unset; height: unset; hyphenate-character: unset; hyphenate-limit-chars: unset; hyphens: unset; image-orientation: unset; image-rendering: unset; initial-letter: unset; inline-size: unset; inset-block: unset; inset-inline: unset; interactivity: unset; interest-delay: unset; interpolate-size: unset; isolation: unset; letter-spacing: unset; lighting-color: unset; line-break: unset; list-style: unset; margin-block: unset; margin: unset; margin-inline: unset; marker: unset; mask: unset; mask-type: unset; math-shift: unset; math-style: unset; max-block-size: unset; max-height: unset; max-inline-size: unset; max-width: unset; min-block-size: unset; min-height: unset; min-inline-size: unset; min-width: unset; mix-blend-mode: unset; object-fit: unset; object-position: unset; object-view-box: unset; offset: unset; opacity: unset; order: unset; orphans: unset; outline: unset; outline-offset: unset; overflow-anchor: unset; overflow-block: unset; overflow-clip-margin: unset; overflow-inline: unset; overflow-wrap: unset; overflow: unset; overlay: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; overscroll-behavior: unset; padding-block: unset; padding: unset; padding-inline: unset; page: unset; page-margin-safety: unset; page-orientation: unset; paint-order: unset; perspective: unset; perspective-origin: unset; pointer-events: unset; position-try: unset; position-visibility: unset; print-color-adjust: unset; quotes: unset; r: unset; reading-flow: unset; reading-order: unset; resize: unset; right: unset; rotate: unset; ruby-align: unset; ruby-overhang: unset; ruby-position: unset; rule-overlap: unset; rx: unset; ry: unset; scale: unset; scroll-axis-lock: unset; scroll-behavior: unset; scroll-initial-target: unset; scroll-margin-block: unset; scroll-margin: unset; scroll-margin-inline: unset; scroll-marker-group: unset; scroll-padding-block: unset; scroll-padding: unset; scroll-padding-inline: unset; scroll-snap-align: unset; scroll-snap-stop: unset; scroll-snap-type: unset; scroll-target-group: unset; scroll-timeline: unset; scrollbar-color: unset; scrollbar-gutter: unset; scrollbar-width: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; shape-rendering: unset; size: unset; speak: unset; stop-color: unset; stop-opacity: unset; stroke: unset; stroke-dasharray: unset; stroke-dashoffset: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-width: unset; tab-size: unset; table-layout: unset; text-align: unset; text-align-last: unset; text-anchor: unset; text-autospace: unset; text-box: unset; text-combine-upright: unset; text-decoration: unset; text-decoration-skip-ink: unset; text-emphasis: unset; text-emphasis-position: unset; text-fit: unset; text-indent: unset; text-justify: unset; text-overflow: unset; text-shadow: unset; text-transform: unset; text-underline-offset: unset; text-underline-position: unset; text-wrap: unset; timeline-scope: unset; timeline-trigger: unset; touch-action: unset; transform: unset; transform-box: unset; transform-origin: unset; transform-style: unset; transition: unset; translate: unset; trigger-scope: unset; user-select: unset; vector-effect: unset; vertical-align: unset; view-timeline: unset; view-transition-class: unset; view-transition-group: unset; view-transition-name: unset; view-transition-scope: unset; visibility: unset; border-spacing: unset; -webkit-box-align: unset; -webkit-box-decoration-break: unset; -webkit-box-direction: unset; -webkit-box-flex: unset; -webkit-box-ordinal-group: unset; -webkit-box-orient: unset; -webkit-box-pack: unset; -webkit-box-reflect: unset; -webkit-line-break: unset; -webkit-line-clamp: unset; -webkit-mask-box-image: unset; -webkit-rtl-ordering: unset; -webkit-ruby-position: unset; -webkit-tap-highlight-color: unset; -webkit-text-combine: unset; -webkit-text-decorations-in-effect: unset; -webkit-text-fill-color: unset; -webkit-text-security: unset; -webkit-text-stroke: unset; -webkit-user-drag: unset; white-space-collapse: unset; widows: unset; width: unset; will-change: unset; window-drag: unset; word-break: unset; word-spacing: unset; x: unset; y: unset; z-index: unset; position: absolute; top: 0px; left: 0px;"></div></div></body></html>

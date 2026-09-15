@@ -1,0 +1,831 @@
+<html lang="es" data-lt-installed="true"><head><style>body {transition: opacity ease-in 0.2s; } 
+body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } 
+</style>
+    <meta charset="UTF-8">
+    <title>Respuestas</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .sidebar {
+            width: 240px;
+            background: #1a2537;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding-top: 30px;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.07);
+            min-height: 100vh;
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.3em;
+            letter-spacing: 1px;
+            color: #4fc3f7;
+        }
+        .sidebar nav {
+            flex: 1;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        .sidebar li {
+            margin-bottom: 0;
+        }
+        .sidebar details {
+            background: none;
+            border: none;
+            color: inherit;
+            width: 100%;
+        }
+        .sidebar summary {
+            cursor: pointer;
+            padding: 16px 24px;
+            font-size: 1.1em;
+            font-weight: 500;
+            border-radius: 0;
+            transition: background 0.2s;
+            outline: none;
+            border-bottom: 1px solid #22325a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            list-style: none;
+        }
+        .sidebar summary .material-icons {
+            font-size: 1.3em;
+            vertical-align: middle;
+        }
+        .sidebar summary::-webkit-details-marker {
+            display: none;
+        }
+        .sidebar summary:after {
+            content: 'expand_more';
+            font-family: 'Material Icons';
+            margin-left: auto;
+            transition: transform 0.2s;
+        }
+        .sidebar details[open] > summary:after {
+            transform: rotate(180deg);
+        }
+        .sidebar summary:hover,
+        .sidebar details[open] > summary {
+            background: #22325a;
+        }
+        .sidebar .submenu {
+            padding-left: 40px;
+            background: #22325a;
+        }
+        .sidebar .submenu a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 0;
+            font-size: 1em;
+            transition: color 0.2s;
+        }
+        .sidebar .submenu a:hover {
+            color: #4fc3f7;
+        }
+        .btn-regresar {
+            background: #6c757d;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .btn-regresar:hover {
+            background: #5a6268;
+        }
+        .main-content {
+            flex: 1;
+            background: #f4f6f8;
+            padding: 40px 50px;
+            min-height: 100vh;
+        }
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            padding: 0 40px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .logout-link {
+            margin-left: auto;
+        }
+        .logout-link a {
+            color: #fff;
+            text-decoration: none;
+            background: #c0392b;
+            padding: 10px 30px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .logout-link a:hover {
+            background: #e74c3c;
+        }
+        .user-info-header {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            margin-right: 30px;
+            font-size: 1em;
+            color: #1a2537;
+        }
+        .user-info-header span {
+            font-weight: 500;
+        }
+        .user-info-header .cargo {
+            font-size: 0.95em;
+            color: #4fc3f7;
+        }
+        .user-info-header .nivel-acceso {
+            background: #e3e7ed;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-size: 0.95em;
+            margin-top: 2px;
+        }
+        h1 {
+            color: #1a2537;
+            margin-bottom: 20px;
+        }
+        .panel-principal {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        .panel-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            width: 100%;
+        }
+        .consulta-panel, .respuesta-panel, .historial-panel {
+            width: 100%;
+            max-width: 650px;
+            margin: 0 auto 0 auto;
+            box-shadow: 0 2px 12px #e0e0e0;
+            border-radius: 10px;
+            background: #fff;
+            padding: 14px 40px;
+        }
+        .consulta-panel h3 {
+            margin-top: 0;
+            color: #1a2537;
+            margin-bottom: 12px;
+        }
+        .consulta-panel .datos {
+            margin-bottom: 10px;
+        }
+        /* Tabla para alinear los datos de la consulta */
+        .consulta-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 12px;
+            font-size: 0.98em;
+        }
+        .consulta-table th {
+            width: 220px;
+            text-align: left;
+            padding: 10px 12px;
+            background: #f4f6f8;
+            color: #1a2537;
+            font-weight: 700;
+            vertical-align: top;
+            border-bottom: 1px solid #e3e7ed;
+        }
+        .consulta-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e3e7ed;
+            color: #22325a;
+        }
+        .consulta-panel .datos-horizontal {
+            display: flex;
+            flex-direction: row;
+            gap: 24px;
+            width: 100%;
+        }
+        .consulta-panel .datos-organizados .grupo-datos {
+            background: #f4f6f8;
+            border-radius: 8px;
+            padding: 18px 24px;
+            margin-bottom: 0;
+            flex: 1 1 0;
+            min-width: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .consulta-panel .consulta-texto {
+            color: #1a2537;
+            font-size: 1.05em;
+            background: #f4f6f8;
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin-top: 8px;
+        }
+        .respuesta-panel {
+            flex: 1;
+            min-width: 320px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            padding: 30px 40px;
+            height: fit-content;
+        }
+        .form-respuesta label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #1a2537;
+        }
+        .form-respuesta input,
+        .form-respuesta textarea,
+        .form-respuesta select {
+            width: 100%;
+            padding: 8px 10px;
+            margin-bottom: 18px;
+            border: 1px solid #e3e7ed;
+            border-radius: 5px;
+            font-size: 1em;
+            background: #f4f6f8;
+        }
+        .form-respuesta textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .form-respuesta button {
+            background: #1a2537;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 24px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .form-respuesta button:hover {
+            background: #4fc3f7;
+            color: #1a2537;
+        }
+        /* Alineación de botones de acción (Responder, Agendar, Nuevo Cliente, Publicar) */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .btn-accion {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 5px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        /* Forzar que inline margin-left no desplace cuando están dentro del contenedor */
+        .action-buttons .btn-accion {
+            margin-left: 0 !important;
+        }
+        /* Hacer que el botón submit adopte dimensiones similares cuando está dentro del contenedor */
+        .action-buttons button {
+            padding: 10px 14px;
+        }
+        /* Caja de Publicar - estética acorde al formulario */
+        .publicar-box {
+            margin-top: 10px;
+            background: #f4f6f8;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #e9eef2;
+            max-width: 320px;
+            color: #1a2537;
+            font-weight: 600;
+        }
+        .publicar-box .titulo {
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            display:block;
+        }
+        .publicar-options {
+            display:flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .publicar-options input[type="radio"] {
+            display:none;
+        }
+        .publicar-options label {
+            display:inline-block;
+            padding:6px 12px;
+            border-radius:20px;
+            cursor:pointer;
+            border:1px solid #e3e7ed;
+            background:#fff;
+            color:#22325a;
+            font-weight:600;
+        }
+        .publicar-options input[type="radio"]:checked + label {
+            background:#4fc3f7;
+            color:#1a2537;
+            border-color: #4fc3f7;
+        }
+
+        .mensaje {
+            background: #e3e7ed;
+            color: #1a2537;
+            border-radius: 5px;
+            padding: 10px 18px;
+            margin-bottom: 18px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .historial-panel {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            padding: 30px 40px;
+            margin-top: 0;
+        }
+        .tabla-respuestas {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            margin-top: 30px;
+            font-size: 0.95em;
+        }
+        .tabla-respuestas th, .tabla-respuestas td {
+            border: 1px solid #e3e7ed;
+            padding: 8px 6px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        .tabla-respuestas th {
+            background: #1a2537;
+            color: #fff;
+        }
+        .tabla-respuestas tr:nth-child(even) {
+            background: #f4f6f8;
+        }
+        .consulta-original {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            padding: 24px 32px;
+            margin-bottom: 30px;
+            max-width: 700px;
+        }
+        .consulta-original h3 {
+            margin-top: 0;
+            color: #1a2537;
+        }
+        .consulta-original p {
+            margin: 6px 0;
+            color: #22325a;
+        }
+        @media (max-width: 900px) {
+            .main-content { padding: 20px 5vw; }
+            .panel-principal { flex-direction: column; gap: 0; }
+            .consulta-panel, .respuesta-panel, .historial-panel { width: 100%; max-width: none; margin-bottom: 24px; }
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const details = document.querySelectorAll('.sidebar details');
+            details.forEach((targetDetail) => {
+                targetDetail.addEventListener('toggle', () => {
+                    if (targetDetail.open) {
+                        details.forEach((detail) => {
+                            if (detail !== targetDetail) {
+                                detail.open = false;
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<aside class="sidebar">
+        <h2><a href="dashboard.php" style="color:inherit;text-decoration:none;">Panel General</a></h2>
+        <nav>
+            <ul>
+                                <li>
+                    <details>
+                        <summary><span class="material-icons">assignment_ind</span>Personal</summary>
+                        <div class="submenu">
+                            <a href="personal.php"> Ver Personal</a>
+                            <a href="agragar_pp.php"> Agregar Personal</a>
+                            <a href="contactos.php"> Contactos</a>
+                        </div>
+                    </details>
+                </li>
+                                                <li>
+                    <details>
+                        <summary><span class="material-icons">assignment</span>Consultas</summary>
+                        <div class="submenu">
+                            <a href="consultas.php"> Ver consulta</a>
+                            <a href="nueva_consulta.php"> Nueva consulta</a>
+                            <a href="consultas_cerradas.php"> Consultas Cerradas</a>
+                        </div>
+                    </details>
+                </li>
+                                                <li>
+                
+                    <details>
+                        <summary><span class="material-icons">person</span>Cliente Ejecutivo</summary>
+                        <div class="submenu">
+                            <a href="ver_clientes.php"> Ver Cliente Ejecutivo</a>
+                            <a href="procesos_cerrados.php"> Procesos Cerrados</a>
+                        </div>
+                    </details>
+                </li>
+                                                <li>
+                    <details>
+                        <summary><span class="material-icons">payments</span>Pagos</summary>
+                        <div class="submenu">
+                            <a href="ver_pagos.php"> Ver Pagos</a>
+                            <a href="nuevo_pago.php"> Registrar Pago</a>
+                        </div>
+                    </details>
+                </li>
+                                                <li>
+                    <details>
+                        <summary><span class="material-icons">event</span>Agenda</summary>
+                        <div class="submenu">
+                            <a href="agenda.php"> Ver Agenda</a>
+                        </div>
+                    </details>
+                </li>
+                <li>
+                    <details>
+                        <summary><span class="material-icons">call</span> Llamadas</summary>
+                        <div class="submenu">
+                            <a href="llamadas.php"> Llamadas Diarias</a>
+                            <a href="llamadas_pendientes.php"> Llamadas Pendientes</a>
+                            <a href="llamadas_futuras.php"> Llamadas Futuras</a>
+                            <a href="todas_las_llamadas.php"> LLamadas Cerradas</a>
+                        </div>
+                    </details>
+                </li>
+                
+
+                                <li>
+                    <details>
+                        <summary><span class="material-icons">bar_chart</span>Estadísticas</summary>
+                        <div class="submenu">
+                            <a href="estadisticas.php"> Ver Estadísticas</a>
+                        </div>
+                    </details>
+                </li>
+                            </ul>
+        </nav>
+    </aside>
+    <div class="main-content">
+        <div class="main-header">
+            <div class="user-info-header">
+                <span>Ernesto  Arancibia Yapura</span>
+                <span class="cargo">Representante Legal</span>
+                <span class="nivel-acceso">Nivel: MASTER</span>
+            </div>
+            <div class="logout-link">
+                <a href="logout.php">Cerrar Sesión</a>
+            </div>
+        </div>
+                    <div style="background:#fff6f6;border:1px solid #f5c6cb;color:#c0392b;padding:10px 16px;border-radius:6px;margin:16px 0;font-weight:700;display:flex;align-items:center;gap:12px;">
+                <span class="material-icons">person_off</span>
+                <span>No es Cliente Ejecutivo</span>
+            </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1 style="margin: 0;">Detalle y Respuesta de Consulta</h1>
+            <a href="consultas.php" class="btn-regresar">
+                <span class="material-icons" style="vertical-align: middle;">arrow_back</span> Regresar
+            </a>
+        </div>
+        <div class="panel-principal">
+            <div class="panel-vertical">
+                <div class="consulta-panel">
+                    <h3>Datos de la Consulta</h3>
+                                            <table class="consulta-table" aria-label="Datos de la consulta">
+                            <tbody><tr><th>Nro. Consulta</th><td>28</td></tr>
+                            <tr><th>Fecha de consulta</th><td>2026-07-13 10:08:00</td></tr>
+                            <tr><th>Nombre</th><td>Miguel Angel Garcia Cabrera</td></tr>
+                            <tr><th>Teléfono</th><td>77537411</td></tr>
+                            <tr><th>Correo</th><td></td></tr>
+                            <tr><th>Ciudad</th><td>la paz</td></tr>
+                            <tr><th>Provincia</th><td>El Alto</td></tr>
+                            <tr><th>País</th><td>Bolivia</td></tr>
+                            <tr><th>Última respuesta</th><td>2026/07/13</td></tr>
+                            <tr><th>Nota interna</th><td>viuno de un taller</td></tr>
+                            <tr><th>Estado</th><td>Reactivado</td></tr>
+                            <tr><th>Origen</th><td>taller colegio: SSCJ</td></tr>
+                        </tbody></table>
+                        <div class="consulta-texto"><strong>Consulta:</strong> asjkhdfboaoshjbdflokajsbdflkasdjbfkl as</div>
+                                    </div>
+                <div class="respuesta-panel">
+                    <h2 style="margin-top:0;">Añadir Nueva Respuesta</h2>
+                                        <form method="post" class="form-respuesta" id="form-respuesta">
+                        <input type="hidden" name="redirect_url" id="redirect_url" value="">
+                                                    <div class="mensaje" style="background:#fff6f6;color:#c0392b; margin-bottom:10px;">Esta consulta ya esta agendada, agendar y responder se encuentran deshabilitado.</div>
+                                                 <label for="resp">Respuesta</label>
+                        <textarea name="resp" id="resp" disabled=""></textarea>
+                        <input type="hidden" name="paso_resp" id="paso_resp" value="Respondido">
+                        <!-- Sección: Publicar - opciones Sí / No (estética mejorada) -->
+                        <!-- esta seccion es la que se modifico para mantener  visible la seleccion de publicacion para la forntpage , es necesario tener la visibilidad permanenetmente de este valor y que pueda moficarse -->
+                        <div class="publicar-box">
+                            <span class="titulo">Publicar</span>
+                            <div class="publicar-options">
+                                <input type="radio" id="publicar_si" name="publicar" value="si">
+                                <label for="publicar_si">Sí</label>
+
+                                <input type="radio" id="publicar_no" name="publicar" value="no" checked="">
+                                <label for="publicar_no">No</label>
+                            </div>
+                        </div>
+                        <label for="designacion">Categoria</label>
+                        <select name="designacion" id="designacion" disabled="">
+                            <option value="">Seleccione...</option>
+                            <option value="Legal">Legal</option>
+                            <option value="Psicologica">Psicologica</option>
+                            <option value="Trabajo Social">Trabajo Social</option>
+                            <option value="Informatica">Informatica</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                        
+                        <input type="hidden" name="designacion_final" id="designacion_final">
+                        <div id="legal-extra-box" style="display:none; margin-top:10px;">
+                            <label for="legal_extra">Materia Legal</label>
+                            <select id="legal_extra" name="legal_extra" disabled="">
+                                <option value="">Seleccione materia legal...</option>
+                                <option value="FAMILIA">FAMILIA</option>
+                                <option value="CIVIL">CIVIL</option>
+                                <option value="PENAL">PENAL</option>
+                                <option value="LABORAL">LABORAL</option>
+                                <option value="IMPOSITIVO">IMPOSITIVO</option>
+                                <option value="MINERO">MINERO</option>
+                                <option value="TRIBUTARIO">TRIBUTARIO</option>
+                                <option value="SEGURO SOCIAL">SEGURO SOCIAL</option>
+                            </select>
+                            <div id="delitos-materia-box" style="display:none;margin-top:10px;">
+                                <label for="delito_materia">Delito relacionado</label>
+                                <select id="delito_materia" name="delito_materia" disabled="">
+                                    <option value="">Seleccione materia legal primero...</option>
+                                </select>
+                            </div>
+                        </div>
+                        <script>
+                        document.getElementById('designacion').addEventListener('change', function() {
+                            var extra = document.getElementById('legal-extra-box');
+                            extra.style.display = this.value === 'Legal' ? 'block' : 'none';
+                        });
+                        // Mostrar delitos relacionados al elegir materia legal
+                        document.getElementById('legal_extra').addEventListener('change', function() {
+                            var materia = this.value;
+                            var box = document.getElementById('delitos-materia-box');
+                            var select = document.getElementById('delito_materia');
+                            if (!materia) {
+                                box.style.display = 'none';
+                                select.innerHTML = '<option value="">Seleccione materia legal primero...</option>';
+                                return;
+                            }
+                            fetch('api_delitos_materia.php?materia=' + encodeURIComponent(materia))
+                                .then(r => r.json())
+                                .then(data => {
+                                    if (data.delitos && data.delitos.length > 0) {
+                                        let html = '<option value="">Seleccione delito...</option>';
+                                        data.delitos.forEach(function(d) {
+                                            html += `<option value=\"${d.id}\">${d.nombre}</option>`;
+                                        });
+                                        select.innerHTML = html;
+                                        box.style.display = '';
+                                    } else {
+                                        select.innerHTML = '<option value="">No hay delitos para esta materia</option>';
+                                        box.style.display = '';
+                                    }
+                                });
+                        });
+                        // Separar materia legal y delito
+                        document.querySelector('.form-respuesta').addEventListener('submit', function(e) {
+                            var designacion = document.getElementById('designacion');
+                            var legal = document.getElementById('legal_extra');
+                            var delito = document.getElementById('delito_materia');
+                            var final = document.getElementById('designacion_final');
+                            var delitoInput = document.getElementById('delito');
+                            
+                            if (designacion.value === 'Legal' && legal.value) {
+                                final.value = legal.value;
+                                // Guardar delito por separado si existe
+                                if (delito && delito.value) {
+                                    var delitoText = delito.options[delito.selectedIndex].text;
+                                    delitoInput.value = delitoText;
+                                } else {
+                                    delitoInput.value = '';
+                                }
+                            } else {
+                                final.value = designacion.value;
+                                delitoInput.value = '';
+                            }
+                        });
+                        
+                        // Crear input oculto para delito si no existe
+                        if (!document.getElementById('delito')) {
+                            var delitoInput = document.createElement('input');
+                            delitoInput.type = 'hidden';
+                            delitoInput.id = 'delito';
+                            delitoInput.name = 'delito';
+                            delitoInput.value = '';
+                            document.querySelector('.form-respuesta').appendChild(delitoInput);
+                        }
+                        </script><input type="hidden" id="delito" name="delito" value="">
+                        <div class="action-buttons">
+                            <input type="hidden" name="fecha_resp" id="fecha_resp">
+                            <!-- Botón Responder -->
+                            <button type="submit" class="btn-accion" disabled="" title="Ya existe una respuesta para esta consulta" onclick="document.getElementById('fecha_resp').value = new Date().toISOString().slice(0, 19).replace('T', ' ');">
+                                <span class="material-icons" style="font-size:1em;vertical-align:middle;">send</span> Responder
+                            </button>
+                            <!-- Botón Agendar -->
+                                                        <a href="agendar.php?id_con=28" id="btn-agendar" class="btn-accion" style="margin-left:10px; background:#43a047; color:#fff; border-radius:5px; padding:10px 24px; text-decoration:none; font-weight:600;" data-disabled="1" title="Ya existe una cita agendada" aria-disabled="true">
+                                <span class="material-icons" style="font-size:1em;vertical-align:middle;">event</span> Agendar
+                            </a>
+                            <!-- Botón Nuevo Cliente Ejecutivo -->
+                                                        <a href="ascender_caso.php?id_con=28&amp;delito=DIVORCIO%20CON%20ACUERDO%20REGULADOR&amp;delito_select=87&amp;ciudad=la%20paz&amp;nombres=Miguel%20Angel&amp;apellidos=Garcia%20Cabrera&amp;telefono=77537411" id="btn-ascender" class="btn-accion" style="margin-left:10px; background:#43a047; color:#fff; border-radius:5px; padding:10px 24px; text-decoration:none; font-weight:600;">
+                                <span class="material-icons" style="font-size:1em;vertical-align:middle;">assignment</span> Nuevo Cliente Ejecutivo                            </a>
+                            <!-- Botón Agendar llamada (al final) -->
+                                                        <a href="agendar_llamada.php?id_con=28&amp;numero_consulta=28&amp;nombres=Miguel+Angel&amp;apellido_pat=Garcia&amp;apellido_mat=Cabrera&amp;telefono=77537411&amp;consulta_text=asjkhdfboaoshjbdflokajsbdflkasdjbfkl+as" id="btn-agendar-llamada" class="btn-accion" style="margin-right:10px;background:#ffb300;color:#1a2537;border-radius:5px;padding:10px 14px;text-decoration:none;font-weight:600;">
+                                <span class="material-icons" style="font-size:1em;vertical-align:middle;">call</span> Agendar llamada
+                            </a>
+                            <script>
+                            document.getElementById('btn-agendar-llamada').addEventListener('click', function(e) {
+                                var materia = document.getElementById('legal_extra');
+                                var delito = document.getElementById('delito_materia');
+                                var url = this.getAttribute('href');
+                                var params = [];
+                                if (materia && materia.value) {
+                                    params.push('materia_legal=' + encodeURIComponent(materia.value));
+                                }
+                                if (delito && delito.value) {
+                                    var delitoText = delito.options[delito.selectedIndex].text;
+                                    params.push('delito=' + encodeURIComponent(delitoText));
+                                }
+                                if (params.length > 0) {
+                                    url += (url.indexOf('?') === -1 ? '?' : '&') + params.join('&');
+                                    this.setAttribute('href', url);
+                                }
+                            });
+                            </script>
+                        </div>
+
+                        
+
+                        
+                        <script>
+                        // Construir URL actualizada para ascender con materia, delito, ciudad y datos del cliente (incluye id_informe si existe)
+                        (function(){
+                            const btnAsc = document.getElementById('btn-ascender');
+                            if (!btnAsc) return;
+                            const designacion = document.getElementById('designacion');
+                            const legal = document.getElementById('legal_extra');
+                            const delitoSelect = document.getElementById('delito_materia');
+                            const ciudadForAsc = "la paz";
+
+                            const nombresForAsc = "Miguel Angel";
+                            const apellidosForAsc = "Garcia Cabrera";
+                            const telefonoForAsc = "77537411";
+                            const latestInformeId = null;
+                            const initialDelitoText = "DIVORCIO CON ACUERDO REGULADOR";
+                            const initialDelitoId = 87;
+                            const existingClienteId = null;
+                            const prefPersonalIdFromServer = null;
+                            const prefPersonalNameFromServer = null;
+
+                            function getEspecialidadFinal() {
+                                if (designacion && designacion.value === 'Legal') {
+                                    return (legal && legal.value) ? legal.value : designacion.value;
+                                }
+                                return designacion ? designacion.value : '';
+                            }
+
+                            function getDelitoTexto() {
+                                // Preferir el texto del select solo si el option seleccionado tiene un value válido (no placeholder)
+                                if (!delitoSelect) return initialDelitoText || '';
+                                const idx = delitoSelect.selectedIndex;
+                                if (idx >= 0 && delitoSelect.options[idx]) {
+                                    const opt = delitoSelect.options[idx];
+                                    const val = (opt.value || '').toString().trim();
+                                    if (val !== '') {
+                                        const txt = opt.text.trim();
+                                        if (txt) return txt;
+                                    }
+                                }
+                                // Si no hay selección válida, usar el delito inicial (última respuesta/informe)
+                                return initialDelitoText || '';
+                            }
+
+                            function getDelitoId() {
+                                // Usar valor del select solo si es numérico (id), o usar data-delito-id si está presente
+                                if (!delitoSelect) return initialDelitoId || '';
+                                const idx = delitoSelect.selectedIndex;
+                                if (idx >= 0 && delitoSelect.options[idx]) {
+                                    const opt = delitoSelect.options[idx];
+                                    const val = (opt.value || '').toString().trim();
+                                    if (val !== '' && !isNaN(val)) return val; // numeric likely id
+                                    const attr = opt.getAttribute('data-delito-id');
+                                    if (attr) return attr;
+                                }
+                                // Fallback al id detectado en servidor
+                                return initialDelitoId || '';
+                            }
+
+                            function buildUrl() {
+                                // Si hay cliente existente, llevar directamente a su ficha
+                                if (existingClienteId) return 'nuevo_caso.php?id_cliente=' + encodeURIComponent(existingClienteId) + '&id_con=28';
+
+                                const base = 'ascender_caso.php?id_con=28';
+                                const especialidad = getEspecialidadFinal() || '';
+                                const delito = getDelitoTexto() || '';
+                                const delitoId = getDelitoId() || '';
+                                const ciudad = ciudadForAsc || '';
+                                let url = base;
+                                // Incluir parámetros siguiendo el formato esperado por ascender_caso.php
+                                if (especialidad) url += '&materia_legal=' + encodeURIComponent(especialidad);
+                                if (delito) url += '&delito=' + encodeURIComponent(delito);
+                                if (delitoId) url += '&delito_select=' + encodeURIComponent(delitoId);
+                                if (ciudad) url += '&ciudad=' + encodeURIComponent(ciudad);
+                                if (nombresForAsc) url += '&nombres=' + encodeURIComponent(nombresForAsc);
+                                if (apellidosForAsc) url += '&apellidos=' + encodeURIComponent(apellidosForAsc);
+                                if (telefonoForAsc) url += '&telefono=' + encodeURIComponent(telefonoForAsc);
+                                if (latestInformeId) url += '&id_informe=' + encodeURIComponent(latestInformeId);
+                                // Incluir prefill del personal encargado si lo tenemos desde el servidor
+                                if (prefPersonalIdFromServer) url += '&pref_personal_id=' + encodeURIComponent(prefPersonalIdFromServer);
+                                else if (prefPersonalNameFromServer) url += '&pref_personal_name=' + encodeURIComponent(prefPersonalNameFromServer);
+                                return url;
+                            }
+
+                            // Actualiza el href dinámicamente (opcional), y en click forzamos navegación usando los valores actuales
+                            function updateHref() {
+                                try { btnAsc.href = buildUrl(); } catch(e){ console.error(e); }
+                            }
+
+                            document.addEventListener('change', updateHref);
+                            // Also update on load
+                            updateHref();
+
+                            btnAsc.addEventListener('click', function(e){
+                                e.preventDefault();
+                                const url = buildUrl();
+                                // Si la especialidad no está definida, dejamos pasar solo con id_con (o si es ficha: también está bien)
+                                if (url) window.location.href = url;
+                            });
+                        })();
+                        </script>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Si el enlace de Agendar está marcado con data-disabled, prevenimos su acción sin alterar su apariencia
+        (function(){
+            var btnAg = document.getElementById('btn-agendar');
+            if (!btnAg) return;
+            if (btnAg.dataset && btnAg.dataset.disabled === '1') {
+                btnAg.addEventListener('click', function(e){
+                    e.preventDefault();
+                    // Sin mensaje ni cambio visual — simplemente no navegar
+                });
+                btnAg.setAttribute('aria-disabled', 'true');
+            }
+        })();
+    </script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;630d129b4eb74fe6ad584747e959c96e&quot;,&quot;r&quot;:1,&quot;spa&quot;:2}" crossorigin="anonymous"></script>
+
+<div style="color-scheme: unset; forced-color-adjust: unset; math-depth: unset; position-anchor: unset; text-size-adjust: unset; appearance: unset; color: unset; font: unset; font-palette: unset; font-synthesis: unset; position-area: unset; text-orientation: unset; text-rendering: unset; text-spacing-trim: unset; -webkit-font-smoothing: unset; -webkit-locale: unset; -webkit-text-orientation: unset; -webkit-writing-mode: unset; writing-mode: unset; zoom: unset; accent-color: unset; place-content: unset; place-items: unset; place-self: unset; alignment-baseline: unset; anchor-name: unset; anchor-scope: unset; animation-composition: unset; animation: unset; animation-trigger: unset; app-region: unset; aspect-ratio: unset; backdrop-filter: unset; backface-visibility: unset; background: unset; background-blend-mode: unset; baseline-shift: unset; baseline-source: unset; block-size: unset; border-block: unset; border: unset; border-radius: unset; border-collapse: unset; border-end-end-radius: unset; border-end-start-radius: unset; border-inline: unset; border-shape: unset; border-start-end-radius: unset; border-start-start-radius: unset; bottom: unset; box-decoration-break: unset; box-shadow: unset; box-sizing: unset; break-after: unset; break-before: unset; break-inside: unset; buffered-rendering: unset; caption-side: unset; caret-animation: unset; caret-color: unset; caret-shape: unset; clear: unset; clip: unset; clip-path: unset; clip-rule: unset; color-interpolation: unset; color-interpolation-filters: unset; color-rendering: unset; columns: unset; column-fill: unset; gap: unset; rule-break: unset; rule: unset; rule-inset: unset; rule-visibility-items: unset; column-span: unset; contain: unset; contain-intrinsic-block-size: unset; contain-intrinsic-size: unset; contain-intrinsic-inline-size: unset; container: unset; content: unset; content-visibility: unset; corner-shape: unset; corner-block-end-shape: unset; corner-block-start-shape: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; cursor: unset; cx: unset; cy: unset; d: unset; display: unset; dominant-baseline: unset; dynamic-range-limit: unset; empty-cells: unset; field-sizing: unset; fill: unset; fill-opacity: unset; fill-rule: unset; filter: unset; flex: unset; flex-flow: unset; flex-line-count: unset; float: unset; flood-color: unset; flood-opacity: unset; grid: unset; grid-area: unset; height: unset; hyphenate-character: unset; hyphenate-limit-chars: unset; hyphens: unset; image-orientation: unset; image-rendering: unset; initial-letter: unset; inline-size: unset; inset-block: unset; inset-inline: unset; interactivity: unset; interest-delay: unset; interpolate-size: unset; isolation: unset; letter-spacing: unset; lighting-color: unset; line-break: unset; list-style: unset; margin-block: unset; margin: unset; margin-inline: unset; marker: unset; mask: unset; mask-type: unset; math-shift: unset; math-style: unset; max-block-size: unset; max-height: unset; max-inline-size: unset; max-width: unset; min-block-size: unset; min-height: unset; min-inline-size: unset; min-width: unset; mix-blend-mode: unset; object-fit: unset; object-position: unset; object-view-box: unset; offset: unset; opacity: unset; order: unset; orphans: unset; outline: unset; outline-offset: unset; overflow-anchor: unset; overflow-block: unset; overflow-clip-margin: unset; overflow-inline: unset; overflow-wrap: unset; overflow: unset; overlay: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; overscroll-behavior: unset; padding-block: unset; padding: unset; padding-inline: unset; page: unset; page-margin-safety: unset; page-orientation: unset; paint-order: unset; perspective: unset; perspective-origin: unset; pointer-events: unset; position-try: unset; position-visibility: unset; print-color-adjust: unset; quotes: unset; r: unset; reading-flow: unset; reading-order: unset; resize: unset; right: unset; rotate: unset; ruby-align: unset; ruby-overhang: unset; ruby-position: unset; rule-overlap: unset; rx: unset; ry: unset; scale: unset; scroll-axis-lock: unset; scroll-behavior: unset; scroll-initial-target: unset; scroll-margin-block: unset; scroll-margin: unset; scroll-margin-inline: unset; scroll-marker-group: unset; scroll-padding-block: unset; scroll-padding: unset; scroll-padding-inline: unset; scroll-snap-align: unset; scroll-snap-stop: unset; scroll-snap-type: unset; scroll-target-group: unset; scroll-timeline: unset; scrollbar-color: unset; scrollbar-gutter: unset; scrollbar-width: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; shape-rendering: unset; size: unset; speak: unset; stop-color: unset; stop-opacity: unset; stroke: unset; stroke-dasharray: unset; stroke-dashoffset: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-width: unset; tab-size: unset; table-layout: unset; text-align: unset; text-align-last: unset; text-anchor: unset; text-autospace: unset; text-box: unset; text-combine-upright: unset; text-decoration: unset; text-decoration-skip-ink: unset; text-emphasis: unset; text-emphasis-position: unset; text-fit: unset; text-indent: unset; text-justify: unset; text-overflow: unset; text-shadow: unset; text-transform: unset; text-underline-offset: unset; text-underline-position: unset; text-wrap: unset; timeline-scope: unset; timeline-trigger: unset; touch-action: unset; transform: unset; transform-box: unset; transform-origin: unset; transform-style: unset; transition: unset; translate: unset; trigger-scope: unset; user-select: unset; vector-effect: unset; vertical-align: unset; view-timeline: unset; view-transition-class: unset; view-transition-group: unset; view-transition-name: unset; view-transition-scope: unset; visibility: unset; border-spacing: unset; -webkit-box-align: unset; -webkit-box-decoration-break: unset; -webkit-box-direction: unset; -webkit-box-flex: unset; -webkit-box-ordinal-group: unset; -webkit-box-orient: unset; -webkit-box-pack: unset; -webkit-box-reflect: unset; -webkit-line-break: unset; -webkit-line-clamp: unset; -webkit-mask-box-image: unset; -webkit-rtl-ordering: unset; -webkit-ruby-position: unset; -webkit-tap-highlight-color: unset; -webkit-text-combine: unset; -webkit-text-decorations-in-effect: unset; -webkit-text-fill-color: unset; -webkit-text-security: unset; -webkit-text-stroke: unset; -webkit-user-drag: unset; white-space-collapse: unset; widows: unset; width: unset; will-change: unset; window-drag: unset; word-break: unset; word-spacing: unset; x: unset; y: unset; z-index: unset; position: absolute; top: 0px; left: 0px;"><div style="color-scheme: unset; forced-color-adjust: unset; math-depth: unset; position-anchor: unset; text-size-adjust: unset; appearance: unset; color: unset; font: unset; font-palette: unset; font-synthesis: unset; position-area: unset; text-orientation: unset; text-rendering: unset; text-spacing-trim: unset; -webkit-font-smoothing: unset; -webkit-locale: unset; -webkit-text-orientation: unset; -webkit-writing-mode: unset; writing-mode: unset; zoom: unset; accent-color: unset; place-content: unset; place-items: unset; place-self: unset; alignment-baseline: unset; anchor-name: unset; anchor-scope: unset; animation-composition: unset; animation: unset; animation-trigger: unset; app-region: unset; aspect-ratio: unset; backdrop-filter: unset; backface-visibility: unset; background: unset; background-blend-mode: unset; baseline-shift: unset; baseline-source: unset; block-size: unset; border-block: unset; border: unset; border-radius: unset; border-collapse: unset; border-end-end-radius: unset; border-end-start-radius: unset; border-inline: unset; border-shape: unset; border-start-end-radius: unset; border-start-start-radius: unset; bottom: unset; box-decoration-break: unset; box-shadow: unset; box-sizing: unset; break-after: unset; break-before: unset; break-inside: unset; buffered-rendering: unset; caption-side: unset; caret-animation: unset; caret-color: unset; caret-shape: unset; clear: unset; clip: unset; clip-path: unset; clip-rule: unset; color-interpolation: unset; color-interpolation-filters: unset; color-rendering: unset; columns: unset; column-fill: unset; gap: unset; rule-break: unset; rule: unset; rule-inset: unset; rule-visibility-items: unset; column-span: unset; contain: unset; contain-intrinsic-block-size: unset; contain-intrinsic-size: unset; contain-intrinsic-inline-size: unset; container: unset; content: unset; content-visibility: unset; corner-shape: unset; corner-block-end-shape: unset; corner-block-start-shape: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; cursor: unset; cx: unset; cy: unset; d: unset; display: unset; dominant-baseline: unset; dynamic-range-limit: unset; empty-cells: unset; field-sizing: unset; fill: unset; fill-opacity: unset; fill-rule: unset; filter: unset; flex: unset; flex-flow: unset; flex-line-count: unset; float: unset; flood-color: unset; flood-opacity: unset; grid: unset; grid-area: unset; height: unset; hyphenate-character: unset; hyphenate-limit-chars: unset; hyphens: unset; image-orientation: unset; image-rendering: unset; initial-letter: unset; inline-size: unset; inset-block: unset; inset-inline: unset; interactivity: unset; interest-delay: unset; interpolate-size: unset; isolation: unset; letter-spacing: unset; lighting-color: unset; line-break: unset; list-style: unset; margin-block: unset; margin: unset; margin-inline: unset; marker: unset; mask: unset; mask-type: unset; math-shift: unset; math-style: unset; max-block-size: unset; max-height: unset; max-inline-size: unset; max-width: unset; min-block-size: unset; min-height: unset; min-inline-size: unset; min-width: unset; mix-blend-mode: unset; object-fit: unset; object-position: unset; object-view-box: unset; offset: unset; opacity: unset; order: unset; orphans: unset; outline: unset; outline-offset: unset; overflow-anchor: unset; overflow-block: unset; overflow-clip-margin: unset; overflow-inline: unset; overflow-wrap: unset; overflow: unset; overlay: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; overscroll-behavior: unset; padding-block: unset; padding: unset; padding-inline: unset; page: unset; page-margin-safety: unset; page-orientation: unset; paint-order: unset; perspective: unset; perspective-origin: unset; pointer-events: unset; position-try: unset; position-visibility: unset; print-color-adjust: unset; quotes: unset; r: unset; reading-flow: unset; reading-order: unset; resize: unset; right: unset; rotate: unset; ruby-align: unset; ruby-overhang: unset; ruby-position: unset; rule-overlap: unset; rx: unset; ry: unset; scale: unset; scroll-axis-lock: unset; scroll-behavior: unset; scroll-initial-target: unset; scroll-margin-block: unset; scroll-margin: unset; scroll-margin-inline: unset; scroll-marker-group: unset; scroll-padding-block: unset; scroll-padding: unset; scroll-padding-inline: unset; scroll-snap-align: unset; scroll-snap-stop: unset; scroll-snap-type: unset; scroll-target-group: unset; scroll-timeline: unset; scrollbar-color: unset; scrollbar-gutter: unset; scrollbar-width: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; shape-rendering: unset; size: unset; speak: unset; stop-color: unset; stop-opacity: unset; stroke: unset; stroke-dasharray: unset; stroke-dashoffset: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-width: unset; tab-size: unset; table-layout: unset; text-align: unset; text-align-last: unset; text-anchor: unset; text-autospace: unset; text-box: unset; text-combine-upright: unset; text-decoration: unset; text-decoration-skip-ink: unset; text-emphasis: unset; text-emphasis-position: unset; text-fit: unset; text-indent: unset; text-justify: unset; text-overflow: unset; text-shadow: unset; text-transform: unset; text-underline-offset: unset; text-underline-position: unset; text-wrap: unset; timeline-scope: unset; timeline-trigger: unset; touch-action: unset; transform: unset; transform-box: unset; transform-origin: unset; transform-style: unset; transition: unset; translate: unset; trigger-scope: unset; user-select: unset; vector-effect: unset; vertical-align: unset; view-timeline: unset; view-transition-class: unset; view-transition-group: unset; view-transition-name: unset; view-transition-scope: unset; visibility: unset; border-spacing: unset; -webkit-box-align: unset; -webkit-box-decoration-break: unset; -webkit-box-direction: unset; -webkit-box-flex: unset; -webkit-box-ordinal-group: unset; -webkit-box-orient: unset; -webkit-box-pack: unset; -webkit-box-reflect: unset; -webkit-line-break: unset; -webkit-line-clamp: unset; -webkit-mask-box-image: unset; -webkit-rtl-ordering: unset; -webkit-ruby-position: unset; -webkit-tap-highlight-color: unset; -webkit-text-combine: unset; -webkit-text-decorations-in-effect: unset; -webkit-text-fill-color: unset; -webkit-text-security: unset; -webkit-text-stroke: unset; -webkit-user-drag: unset; white-space-collapse: unset; widows: unset; width: unset; will-change: unset; window-drag: unset; word-break: unset; word-spacing: unset; x: unset; y: unset; z-index: unset; position: absolute; top: 0px; left: 0px;"></div></div></body></html>

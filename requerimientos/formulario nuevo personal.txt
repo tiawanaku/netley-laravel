@@ -1,0 +1,622 @@
+<html lang="es" data-lt-installed="true"><head><style>body {transition: opacity ease-in 0.2s; } 
+body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } 
+</style>
+<meta charset="UTF-8">
+<title>Agregar Personal</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.form-container {
+max-width: 600px;
+margin: 40px auto;
+background: #fff;
+border-radius: 10px;
+box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+padding: 40px 30px;
+}
+.form-container h2 {
+margin-top: 0;
+color: #1a2537;
+}
+.form-container label {
+font-weight: 600;
+color: #1a2537;
+display: block;
+margin-top: 10px;
+}
+.form-container input, .form-container select {
+width: 100%;
+padding: 8px;
+margin-top: 4px;
+border-radius: 5px;
+border: 1px solid #e3e7ed;
+font-size: 1em;
+}
+.form-container button {
+margin-top: 20px;
+background: #1a2537;
+color: #fff;
+font-weight: 600;
+border: none;
+border-radius: 5px;
+padding: 10px 30px;
+font-size: 1em;
+cursor: pointer;
+transition: background 0.2s;
+}
+.form-container button:hover {
+background: #4fc3f7;
+color: #1a2537;
+}
+.mensaje {
+margin-bottom: 15px;
+color: #27ae60;
+font-weight: 600;
+}
+.volver-link {
+display: inline-block;
+margin: 10px 0 0 0;
+color: #1a2537;
+text-decoration: none;
+font-weight: 600;
+}
+.volver-link:hover {
+color: #4fc3f7;
+}
+</style>
+</head>
+<body>
+<div class="form-container">
+<a class="volver-link" href="personal.php">← Volver a la lista</a>
+<h2>Agregar Personal</h2>
+<form id="form-agregar-personal" method="post" enctype="multipart/form-data">
+
+    <label for="nombres">Nombres</label>
+        <input type="text" name="nombres" id="nombres" required="" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" title="Solo letras" oninput="this.value=this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]/g,'')">
+
+        <label for="ap_paterno">Apellido Paterno</label>
+        <input type="text" name="ap_paterno" id="ap_paterno" required="" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" title="Solo letras" oninput="this.value=this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]/g,'')">
+
+        <label for="ap_materno">Apellido Materno</label>
+        <input type="text" name="ap_materno" id="ap_materno" required="" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" title="Solo letras" oninput="this.value=this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]/g,'')">
+
+        <label for="genero">Género</label>
+        <select name="genero" id="genero" required="">
+            <option value="">Seleccione</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Otro">Otro</option>
+        </select>
+        <label for="fecha_inicio">Fecha de Inicio</label>
+        <input type="datetime-local" name="fecha_inicio" id="fecha_inicio" required="" value="2026-09-07T08:28">
+        <!-- Categoría fija: ABOGADO (oculta) -->
+        <input type="hidden" name="categoria" value="3">
+
+        <!-- Profesión: select único (nueva columna 'profession' en la tabla) -->
+        <label for="profession">Cargo</label>
+        <select name="profession" id="profession" required="" style="width:100%; padding:8px; margin-top:4px;">
+            <option value="">Seleccione</option>
+            <option value="Directora">Directora</option>
+            <option value="Gerente">Gerente</option>
+            <option value="Coordinadora">Coordinadora</option>
+            <option value="Representante legal">Representante legal</option>
+            <option value="Administrativo">Administrativo</option>
+            <option value="Abogado">Abogado</option>
+            <option value="Psicologo">Psicologo</option>
+            <option value="Trabajador Social">Trabajador Social</option>
+            <option value="Medico">Medico</option>
+            <option value="Contador">Contador</option>
+            <option value="Secretaria">Secretaria</option>
+            <option value="Limpieza">Limpieza</option>
+            <option value="Pasante">Pasante</option>
+        </select>
+        <!-- Nota: la categoría está fijada en 3 (ABOGADO) y no se muestra al usuario -->
+        <label for="cargo">Profesion</label>
+        <div id="cargo_group" style="display:flex;flex-wrap:wrap;gap:8px;">
+            <label><input type="checkbox" name="cargo[]" value="Abogado"> Abogada/Abogado</label>
+            <label><input type="checkbox" name="cargo[]" value="Psicologia"> Psicologa/Psicologo</label>
+            <label><input type="checkbox" name="cargo[]" value="Trabajo Social"> Trabajador Social</label>
+            <label><input type="checkbox" name="cargo[]" value="Medico"> Médico</label>
+            <label><input type="checkbox" name="cargo[]" value="Administrativo"> Administrativa/Administrativo</label>
+            <label><input type="checkbox" name="cargo[]" value="Contador"> Contadora/Contador</label>
+            <label><input type="checkbox" name="cargo[]" value="Secretaria"> Secretaria</label>
+            <label><input type="checkbox" name="cargo[]" value="Pasante"> Pasante</label>
+            <label><input type="checkbox" name="cargo[]" value="Limpieza"> Limpieza</label>
+            <label><input type="checkbox" id="cargo_otros_cb" name="cargo[]" value="Otros"> Otra profesion</label>
+        </div>
+        <input type="text" name="cargo_otros" id="cargo_otros" placeholder="Escriba aquí (separar por comas para varios)" style="margin-top: 8px; display: none;">
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var cbOtros = document.getElementById('cargo_otros_cb');
+                var cargoOtros = document.getElementById('cargo_otros');
+                function updateOtrosVisibility() {
+                    if (cbOtros && cbOtros.checked) cargoOtros.style.display = '';
+                    else if (cargoOtros) { cargoOtros.style.display = 'none'; cargoOtros.value = ''; }
+                }
+                if (cbOtros) cbOtros.addEventListener('change', updateOtrosVisibility);
+                updateOtrosVisibility();
+
+                // Validación: al enviar el formulario, asegurarse de que al menos 1 cargo esté seleccionado
+                var form = document.querySelector('.form-container form');
+                if (form) {
+                    form.addEventListener('submit', function(e){
+                        var checked = form.querySelectorAll('input[name="cargo[]"]:checked').length;
+                        if (checked === 0) {
+                            alert('Seleccione al menos un cargo.');
+                            e.preventDefault();
+                            return false;
+                        }
+                        // Copiar valor de 'Otros' (si hay) en el campo cargo_otros (ya está en el input)
+                    });
+                }
+            });
+        </script>
+
+
+        <div style="font-size:0.95em;color:#666;margin-top:6px;">Seleccione una profesión (obligatorio).</div> 
+
+        <!-- Especialidades legales -->
+        <div id="especialidad_legal" class="especialidad-block" style="margin-bottom: 10px; flex-direction: column; gap: 8px; display: none;">
+            <label>Especialidades (Legales) <small style="font-weight:400;font-size:0.9em;color:#666;margin-left:6px;">(Puedes seleccionar varias)</small></label>
+            <div style="min-width:260px;padding:12px 18px;background:#f7f7f7;border-radius:8px;box-shadow:0 1px 4px #ccc;display:flex;flex-wrap:wrap;gap:10px;">
+                <button type="button" class="btn-especialidad" data-value="CIVIL">CIVIL</button>
+                <button type="button" class="btn-especialidad" data-value="IMPOSITIVO">IMPOSITIVO</button>
+                <button type="button" class="btn-especialidad" data-value="MINERO">MINERO</button>
+                <button type="button" class="btn-especialidad" data-value="PENAL">PENAL</button>
+                <button type="button" class="btn-especialidad" data-value="TRIBUTARIO">TRIBUTARIO</button>
+                <button type="button" class="btn-especialidad" data-value="LABORAL">LABORAL</button>
+                <button type="button" class="btn-especialidad" data-value="SEGURIDAD SOCIAL">SEGURIDAD SOCIAL</button>
+                <button type="button" class="btn-especialidad" data-value="FAMILIA">FAMILIA</button>
+                <button type="button" class="btn-especialidad" data-value="SIN ESPECIALIDAD">SIN ESPECIALIDAD</button>
+            </div>
+        </div>
+
+        <!-- Especialidades de Psicología -->
+        <div id="especialidad_psico" class="especialidad-block" style="margin-bottom: 10px; flex-direction: column; gap: 8px; display: none;">
+            <label>Especialidades (Psicología) <small style="font-weight:400;font-size:0.9em;color:#666;margin-left:6px;">(Puedes seleccionar varias)</small></label>
+            <div style="min-width:260px;padding:12px 18px;background:#f7f7f7;border-radius:8px;box-shadow:0 1px 4px #ccc;display:flex;flex-wrap:wrap;gap:10px;">
+                <button type="button" class="btn-especialidad" data-value="CLINICA">PSICOLOGIA CLÍNICA</button>
+                <button type="button" class="btn-especialidad" data-value="FORENSE">PSICOLOGIA FORENSE</button>
+                <button type="button" class="btn-especialidad" data-value="EDUCATIVA">PSICOLOGIA EDUCATIVA</button>
+                <button type="button" class="btn-especialidad" data-value="SOCIAL">PSICOLOGIA SOCIAL</button>
+                <button type="button" class="btn-especialidad" data-value="FAMILIAR">PSICOLOGIA FAMILIAR</button>
+            </div>
+        </div>
+
+        <!-- Especialidades Médicas -->
+        <div id="especialidad_medica" class="especialidad-block" style="margin-bottom: 10px; flex-direction: column; gap: 8px; display: none;">
+            <label>Especialidades (Médicas) <small style="font-weight:400;font-size:0.9em;color:#666;margin-left:6px;">(Puedes seleccionar varias)</small></label>
+            <div style="min-width:260px;padding:12px 18px;background:#f7f7f7;border-radius:8px;box-shadow:0 1px 4px #ccc;display:flex;flex-wrap:wrap;gap:10px;">
+                <button type="button" class="btn-especialidad" data-value="CARDIOLOGIA">CARDIOLOGÍA</button>
+                <button type="button" class="btn-especialidad" data-value="NEUMOLOGIA">NEUMOLOGÍA</button>
+                <button type="button" class="btn-especialidad" data-value="NEUROLOGIA">NEUROLOGÍA</button>
+                <button type="button" class="btn-especialidad" data-value="HEMATOLOGIA">HEMATOLOGÍA</button>
+                <button type="button" class="btn-especialidad" data-value="INFECTOLOGIA">INFECTOLOGÍA</button>
+                <button type="button" class="btn-especialidad" data-value="ENDOCRINOLOGIA">ENDOCRINOLOGÍA</button>
+                <button type="button" class="btn-especialidad" data-value="REUMATOLOGIA">REUMATOLOGÍA</button>
+                <button type="button" class="btn-especialidad" data-value="GASTROENTEROLOGIA">GASTROENTEROLOGÍA</button>
+                <button type="button" class="btn-especialidad" data-value="CIRUGIA GENERAL">CIRUGÍA GENERAL</button>
+                <button type="button" class="btn-especialidad" data-value="NEUROCIRUGIA">NEUROCIRUGÍA</button>
+                <button type="button" class="btn-especialidad" data-value="MEDICO GENERAL">MÉDICO GENERAL</button>
+            </div>
+        </div>
+
+        <!-- Especialidades Trabajo Social -->
+        <div id="especialidad_ts" class="especialidad-block" style="margin-bottom: 10px; flex-direction: column; gap: 8px; display: none;">
+            <label>Especialidades (Trabajo Social) <small style="font-weight:400;font-size:0.9em;color:#666;margin-left:6px;">(Puedes seleccionar varias)</small></label>
+            <div style="min-width:260px;padding:12px 18px;background:#f7f7f7;border-radius:8px;box-shadow:0 1px 4px #ccc;display:flex;flex-wrap:wrap;gap:10px;">
+                <button type="button" class="btn-especialidad" data-value="TRABAJO SOCIAL FAMILIAR">TRABAJO SOCIAL FAMILIAR</button>
+                <button type="button" class="btn-especialidad" data-value="TRABAJO SOCIAL SALUD">TRABAJO SOCIAL SALUD</button>
+                <button type="button" class="btn-especialidad" data-value="TRABAJO SOCIAL EDUCATIVO">TRABAJO SOCIAL EDUCATIVO</button>
+                <button type="button" class="btn-especialidad" data-value="TRABAJO SOCIAL COMUNITARIO">TRABAJO SOCIAL COMUNITARIO</button>
+                <button type="button" class="btn-especialidad" data-value="TRABAJO SOCIAL JURIDICO">TRABAJO SOCIAL JURÍDICO</button>
+            </div>
+        </div>
+
+        <input type="hidden" name="especialidad" id="especialidad_hidden" value="">
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const hiddenInput = document.getElementById('especialidad_hidden');
+                const cbAbogado = document.querySelector('input[name="cargo[]"][value="Abogado"]');
+                const cbPsico = document.querySelector('input[name="cargo[]"][value="Psicologia"]');
+                const cbMedico = document.querySelector('input[name="cargo[]"][value="Medico"]');
+                const cbTrabajoSocial = document.querySelector('input[name="cargo[]"][value="Trabajo Social"]');
+
+                const blockLegal = document.getElementById('especialidad_legal');
+                const blockPsico = document.getElementById('especialidad_psico');
+                const blockMed = document.getElementById('especialidad_medica');
+                const blockTS = document.getElementById('especialidad_ts');
+
+                const allBtns = document.querySelectorAll('.btn-especialidad');
+
+                allBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        // Determinar a qué grupo pertenece el botón
+                        const parent = btn.closest('.especialidad-block');
+                        if (!parent) return;
+                        const gid = parent.id;
+                        // Validar que el cargo correspondiente esté seleccionado
+                        if (gid === 'especialidad_legal' && cbAbogado && !cbAbogado.checked) return;
+                        if (gid === 'especialidad_psico' && cbPsico && !cbPsico.checked) return;
+                        if (gid === 'especialidad_medica' && cbMedico && !cbMedico.checked) return;
+                        if (gid === 'especialidad_ts' && cbTrabajoSocial && !cbTrabajoSocial.checked) return;
+                        // Multi-select: alternar selección sin deseleccionar otras
+                        btn.classList.toggle('selected');
+                        actualizarEspecialidad();
+                    });
+                });
+
+                function actualizarEspecialidad() {
+                    const seleccionadas = Array.from(document.querySelectorAll('.btn-especialidad.selected')).map(b => b.getAttribute('data-value'));
+                    hiddenInput.value = seleccionadas.join(',');
+                }
+
+                function updateVisibility() {
+                    // Legal
+                    if (cbAbogado && cbAbogado.checked) {
+                        blockLegal.style.display = '';
+                    } else {
+                        // ocultar y limpiar
+                        blockLegal.style.display = 'none';
+                        blockLegal.querySelectorAll('.btn-especialidad.selected').forEach(b=>b.classList.remove('selected'));
+                    }
+                    // Psicología
+                    if (cbPsico && cbPsico.checked) {
+                        blockPsico.style.display = '';
+                    } else {
+                        blockPsico.style.display = 'none';
+                        blockPsico.querySelectorAll('.btn-especialidad.selected').forEach(b=>b.classList.remove('selected'));
+                    }
+                    // Médicas
+                    if (cbMedico && cbMedico.checked) {
+                        blockMed.style.display = '';
+                    } else {
+                        blockMed.style.display = 'none';
+                        blockMed.querySelectorAll('.btn-especialidad.selected').forEach(b=>b.classList.remove('selected'));
+                    }
+                    // Trabajo Social
+                    if (cbTrabajoSocial && cbTrabajoSocial.checked) {
+                        blockTS.style.display = '';
+                    } else {
+                        blockTS.style.display = 'none';
+                        blockTS.querySelectorAll('.btn-especialidad.selected').forEach(b=>b.classList.remove('selected'));
+                    }
+                    actualizarEspecialidad();
+                }
+
+                // Hooks para checkboxes
+                if (cbAbogado) cbAbogado.addEventListener('change', updateVisibility);
+                if (cbPsico) cbPsico.addEventListener('change', updateVisibility);
+                if (cbMedico) cbMedico.addEventListener('change', updateVisibility);
+                if (cbTrabajoSocial) cbTrabajoSocial.addEventListener('change', updateVisibility);
+
+                // Inicializar visibilidad
+                updateVisibility();
+
+                // Enviar: si ninguno de los cargos que tienen especialidades está seleccionado, forzar NO APLICA
+                const form = document.querySelector('.form-container form');
+                if (form) {
+                    form.addEventListener('submit', function(e){
+                        const hasSpecialityCargo = (cbAbogado && cbAbogado.checked) || (cbPsico && cbPsico.checked) || (cbMedico && cbMedico.checked) || (cbTrabajoSocial && cbTrabajoSocial.checked);
+                        const sel = Array.from(document.querySelectorAll('.btn-especialidad.selected')).map(b => b.getAttribute('data-value')).join(',');
+                    if (sel) {
+                        hiddenInput.value = sel;
+                    } else {
+                        if (!hasSpecialityCargo) {
+                            hiddenInput.value = 'NO APLICA';
+                        } else {
+                            hiddenInput.value = '';
+                        }
+                    }
+                    });
+                }
+             });
+         </script>
+        <label for="ci_per">CI</label>
+        <input type="text" name="ci_per" id="ci_per" required="" pattern="[0-9]+" title="Solo números" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+        <div id="ci-warning" style="color:#d32f2f;font-weight:600;margin-top:6px;display:none;"></div>
+        <label for="expedido">Expedido</label>
+        <select name="expedido" id="expedido" required="">
+            <option value="">Seleccione</option>
+            <option value="LP">LP - La Paz</option>
+            <option value="CB">CB - Cochabamba</option>
+            <option value="SC">SC - Santa Cruz</option>
+            <option value="OR">OR - Oruro</option>
+            <option value="PT">PT - Potosí</option>
+            <option value="CH">CH - Chuquisaca</option>
+            <option value="TJ">TJ - Tarija</option>
+            <option value="BN">BN - Beni</option>
+            <option value="PD">PD - Pando</option>
+            <option value="QR">QR</option>
+            <option value="OTRO">OTRO</option>
+        </select>
+        <input type="text" name="expedido_otro" id="expedido_otro" style="display:none;margin-top:6px;" placeholder="Especifique expedido">
+
+        <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+        <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" required="" value="2008-09-07">
+
+        <label for="nacionalidad">Nacionalidad</label>
+        <input type="text" name="nacionalidad" id="nacionalidad" required="">
+        <label for="estado_civil">Estado Civil</label>
+        <select name="estado_civil" id="estado_civil" required="">
+            <option value="">Seleccione</option>
+            <option value="Soltero">Soltero</option>
+            <option value="Casado">Casado</option>
+            <option value="Divorciado">Divorciado</option>
+            <option value="Viudo">Viudo</option>
+        </select>
+        <label for="direccion">Dirección</label>
+        <input type="text" name="direccion" id="direccion" required="">
+
+        <label for="ciudad_res">Ciudad</label>
+        <input type="text" name="ciudad_res" id="ciudad_res" style="margin-bottom:8px;">
+
+        <label for="telf">Teléfono</label>
+        <input type="text" name="telf" id="telf" required="" pattern="[0-9]+" title="Solo números" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+        <div id="telf-warning" style="color:#d32f2f;font-weight:600;margin-top:6px;display:none;"></div>
+
+        <label for="whatsapp">WhatsApp</label>
+        <input type="text" name="whatsapp" id="whatsapp" pattern="[0-9]+" title="Solo números" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+
+        <label for="correo">Correo</label>
+        <input type="email" name="correo" id="correo" required="">
+
+
+
+       <label for="contrato">Contrato</label>
+        <input type="number" name="contrato" id="contrato" required="">
+
+        <label for="estado">Estado</label>
+        <select name="estado" id="estado" required="">
+            <option value="habilitado">Habilitado</option>
+            <option value="deshabilitado">Deshabilitado</option>
+        </select>
+
+        <label for="foto">Foto</label>
+        <input type="file" name="foto" id="foto" accept="image/*">
+
+        <label for="nota_netley">Nota Netley</label>
+        <textarea name="nota_netley" id="nota_netley" rows="3" style="width:100%; padding:8px; border-radius:5px; border:1px solid #e3e7ed; font-size:1em; margin-top:4px;"></textarea>
+
+        <div>
+            <button type="submit">Agregar Personal</button>
+            </div>
+        <style>
+        .btn-especialidad {
+            background:linear-gradient(90deg,#e3f2fd 0%,#f7f7f7 100%);
+            border:1px solid #b0bec5;
+            border-radius:6px;
+            padding:8px 16px;
+            cursor:pointer;
+            font-size:15px;
+            color:#222;
+            box-shadow:0 1px 4px #e0e0e0;
+            transition:background 0.2s,border 0.2s,color 0.2s;
+        }
+        .btn-especialidad.selected {
+            background:#1976d2;
+            border:2px solid #0d47a1;
+            color:#fff;
+        }
+        /* Modal de aviso (centro, colorido) */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(10, 20, 30, 0.45); display: none; align-items: center; justify-content: center; z-index: 9999; }
+        .modal-box { width: 420px; max-width: calc(100% - 40px); background: #fff; border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.25); overflow: hidden; font-family: inherit; }
+        .modal-header { background: linear-gradient(90deg, #4fc3f7 0%, #0288d1 100%); padding: 14px 18px; color: #fff; }
+        .modal-header h3 { margin: 0; font-size: 1.05em; }
+        .modal-body { padding: 18px; color: #1a2537; font-size: 0.98em; }
+        .modal-actions { padding: 12px 18px; text-align: right; background: #f6f8fa; }
+        .modal-actions button { background: #0288d1; color: #fff; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .modal-actions button.secondary { background: #90a4ae; margin-right:8px; }
+        </style>
+        </form></div>
+
+    
+
+
+<script>
+// Permitir que Enter avance al siguiente campo del formulario (salvo en textarea)
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('.form-container form');
+    if (!form) return;
+    const sel = 'input:not([type="hidden"]):not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled])';
+
+    form.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter') return;
+        const target = e.target;
+        // dejar Enter normal en textarea
+        if (target && target.tagName && target.tagName.toLowerCase() === 'textarea') return;
+        // evitar submit automático
+        e.preventDefault();
+
+        const focusables = Array.from(form.querySelectorAll(sel)).filter(el => {
+            // filtrar elementos invisibles
+            return el.offsetParent !== null || el === document.activeElement;
+        });
+        let idx = focusables.indexOf(target);
+        if (idx === -1) idx = focusables.indexOf(document.activeElement);
+        const next = focusables[idx + 1];
+        if (next) {
+            // si es un botón de especialidad, "click" y mantener foco
+            if (next.classList.contains('btn-especialidad')) {
+                next.click();
+                next.focus();
+            } else {
+                next.focus();
+                // seleccionar el contenido si es input de texto
+                try { if (next.select) next.select(); } catch(err){}
+            }
+        } else {
+            // si no hay siguiente control, intentar enfocar el botón submit si existe
+            const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+            if (submitBtn) submitBtn.focus();
+        }
+    }, true);
+});
+</script>
+
+<script>
+// Modal util y validación previa (AJAX) de CI y Teléfono antes de enviar el formulario
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('form-agregar-personal') || document.querySelector('.form-container form');
+    const ciInput = document.getElementById('ci_per');
+    const telfInput = document.getElementById('telf');
+    const expedidoSelect = document.getElementById('expedido');
+    const expedidoOtro = document.getElementById('expedido_otro');
+    // Flags para mostrar la alerta solo una vez por valor hasta que el usuario cambie el campo
+    let ciAlertedFor = '';
+    let telfAlertedFor = '';
+
+    // Modal creado bajo demanda + lógica de re-check con cuenta regresiva (10s)
+    const repeatState = { ci: { value:'', timeoutId:null, intervalId:null, remaining:0 }, telf: { value:'', timeoutId:null, intervalId:null, remaining:0 } };
+
+    function createModalIfNeeded() {
+        let overlay = document.getElementById('dup-modal');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'dup-modal';
+            overlay.className = 'modal-overlay';
+            overlay.innerHTML = `
+                <div class="modal-box" role="dialog" aria-modal="true">
+                    <div class="modal-header"><h3 id="modal-title"></h3></div>
+                    <div class="modal-body" id="modal-body"></div>
+                    <div class="modal-actions">
+                        <button id="modal-close">Cerrar</button>
+                    </div>
+                </div>`;
+            document.body.appendChild(overlay);
+            document.getElementById('modal-close').addEventListener('click', function(){ 
+                overlay.style.display = 'none';
+                const t = overlay.dataset.type;
+                const v = overlay.dataset.value;
+                if (t && v) startRecheckTimer(t, v);
+            });
+            overlay.addEventListener('click', function(e){ if (e.target === overlay) { overlay.style.display = 'none'; const t = overlay.dataset.type; const v = overlay.dataset.value; if (t && v) startRecheckTimer(t, v); } });
+        }
+        return overlay;
+    }
+
+    function showModalImmediate(title, msg, type, value) {
+        const overlay = createModalIfNeeded();
+        overlay.dataset.type = type || '';
+        overlay.dataset.value = value || '';
+        document.getElementById('modal-title').textContent = title;
+        document.getElementById('modal-body').textContent = msg;
+        overlay.style.display = 'flex';
+        const btn = document.getElementById('modal-close'); if (btn) btn.focus();
+    }
+
+    function clearRepeat(type) {
+        const s = repeatState[type];
+        if (!s) return;
+        if (s.timeoutId) { clearTimeout(s.timeoutId); s.timeoutId = null; }
+        if (s.intervalId) { clearInterval(s.intervalId); s.intervalId = null; }
+        s.value = '';
+        s.remaining = 0;
+        if (type === 'ci' && typeof ciWarning !== 'undefined' && ciWarning) { ciWarning.style.display = 'none'; ciWarning.textContent = ''; }
+        if (type === 'telf' && typeof telfWarning !== 'undefined' && telfWarning) { telfWarning.style.display = 'none'; telfWarning.textContent = ''; }
+    }
+
+    function startRecheckTimer(type, value) {
+        clearRepeat(type);
+        const s = repeatState[type];
+        s.value = value;
+        s.remaining = 10;
+        const win = type === 'ci' ? ciWarning : telfWarning;
+        if (win) { win.style.display = ''; win.textContent = `Tienes ${s.remaining} segundos para cambiarlo...`; }
+        s.intervalId = setInterval(function(){
+            s.remaining -= 1;
+            if (win) win.textContent = `Tienes ${s.remaining} segundos para cambiarlo...`;
+            if (s.remaining <= 0) {
+                clearRepeat(type);
+                const current = (type === 'ci' ? (ciInput ? ciInput.value.trim() : '') : (telfInput ? telfInput.value.replace(/\D/g,'') : ''));
+                if (current === value) {
+                    (async function(){
+                        try {
+                            const res = await checkExists(type === 'ci' ? current : '', type === 'telf' ? current : '');
+                            if ((type === 'ci' && res.ci_exists) || (type === 'telf' && res.telf_exists)) {
+                                showModalImmediate(type === 'ci' ? 'CI duplicado' : 'Teléfono duplicado', type === 'ci' ? 'El carnet de identidad sigue registrado.' : 'El número de teléfono sigue registrado.', type, value);
+                            }
+                        } catch (e) { console.warn(e); }
+                    })();
+                }
+            }
+        }, 1000);
+    }
+
+    async function checkExists(ci, telf) {
+        const params = new URLSearchParams();
+        if (ci) params.set('ci', ci);
+        if (telf) params.set('telf', telf.replace(/\D/g,''));
+        const res = await fetch('check_personal.php?' + params.toString(), { cache: 'no-store' });
+        return res.json();
+    }
+
+    // Expedido: mostrar campo cuando se selecciona 'OTRO'
+    if (expedidoSelect && expedidoOtro) {
+        function updateExpedido() {
+            if (expedidoSelect.value === 'OTRO') {
+                expedidoOtro.style.display = '';
+                expedidoOtro.required = true;
+                try { expedidoOtro.focus(); } catch (e) {}
+            } else {
+                expedidoOtro.style.display = 'none';
+                expedidoOtro.required = false;
+                expedidoOtro.value = '';
+            }
+        }
+        expedidoSelect.addEventListener('change', updateExpedido);
+        updateExpedido();
+    }
+
+    if (ciInput) {
+        ciInput.addEventListener('input', function() { ciAlertedFor = ''; });
+        ciInput.addEventListener('blur', async function() {
+            const v = this.value.trim();
+            if (!v) return;
+            if (ciAlertedFor === v) return; // ya se mostró alerta para este valor
+            try {
+                const r = await checkExists(v, '');
+                if (r.ci_exists) { showModal('CI duplicado', 'El carnet de identidad ya está registrado.'); ciAlertedFor = v; this.focus(); }
+            } catch (err) { console.warn(err); }
+        });
+    }
+
+    if (telfInput) {
+        telfInput.addEventListener('input', function() { telfAlertedFor = ''; });
+        telfInput.addEventListener('blur', async function() {
+            const v = this.value.replace(/\D/g,'');
+            if (!v) return;
+            if (telfAlertedFor === v) return; // ya se mostró alerta para este valor
+            try {
+                const r = await checkExists('', v);
+                if (r.telf_exists) { showModal('Teléfono duplicado', 'El número de teléfono ya está registrado.'); telfAlertedFor = v; this.focus(); }
+            } catch (err) { console.warn(err); }
+        });
+    }
+
+    if (form) {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const ci = ciInput ? ciInput.value.trim() : '';
+            const telf = telfInput ? telfInput.value.replace(/\D/g,'') : '';
+            try {
+                const r = await checkExists(ci, telf);
+                if (r.ci_exists) {
+                    if (ciAlertedFor !== ci) { showModal('CI duplicado', 'El carnet de identidad ya está registrado.'); ciAlertedFor = ci; }
+                    if (ciInput) ciInput.focus();
+                    return;
+                }
+                if (r.telf_exists) {
+                    if (telfAlertedFor !== telf) { showModal('Teléfono duplicado', 'El número de teléfono ya está registrado.'); telfAlertedFor = telf; }
+                    if (telfInput) telfInput.focus();
+                    return;
+                }
+                form.submit();
+            } catch (err) { console.error(err); form.submit(); }
+        });
+    }
+});
+</script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;630d129b4eb74fe6ad584747e959c96e&quot;,&quot;r&quot;:1,&quot;spa&quot;:2}" crossorigin="anonymous"></script>
+
+<div style="color-scheme: unset; forced-color-adjust: unset; math-depth: unset; position-anchor: unset; text-size-adjust: unset; appearance: unset; color: unset; font: unset; font-palette: unset; font-synthesis: unset; position-area: unset; text-orientation: unset; text-rendering: unset; text-spacing-trim: unset; -webkit-font-smoothing: unset; -webkit-locale: unset; -webkit-text-orientation: unset; -webkit-writing-mode: unset; writing-mode: unset; zoom: unset; accent-color: unset; place-content: unset; place-items: unset; place-self: unset; alignment-baseline: unset; anchor-name: unset; anchor-scope: unset; animation-composition: unset; animation: unset; animation-trigger: unset; app-region: unset; aspect-ratio: unset; backdrop-filter: unset; backface-visibility: unset; background: unset; background-blend-mode: unset; baseline-shift: unset; baseline-source: unset; block-size: unset; border-block: unset; border: unset; border-radius: unset; border-collapse: unset; border-end-end-radius: unset; border-end-start-radius: unset; border-inline: unset; border-shape: unset; border-start-end-radius: unset; border-start-start-radius: unset; bottom: unset; box-decoration-break: unset; box-shadow: unset; box-sizing: unset; break-after: unset; break-before: unset; break-inside: unset; buffered-rendering: unset; caption-side: unset; caret-animation: unset; caret-color: unset; caret-shape: unset; clear: unset; clip: unset; clip-path: unset; clip-rule: unset; color-interpolation: unset; color-interpolation-filters: unset; color-rendering: unset; columns: unset; column-fill: unset; gap: unset; rule-break: unset; rule: unset; rule-inset: unset; rule-visibility-items: unset; column-span: unset; contain: unset; contain-intrinsic-block-size: unset; contain-intrinsic-size: unset; contain-intrinsic-inline-size: unset; container: unset; content: unset; content-visibility: unset; corner-shape: unset; corner-block-end-shape: unset; corner-block-start-shape: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; cursor: unset; cx: unset; cy: unset; d: unset; display: unset; dominant-baseline: unset; dynamic-range-limit: unset; empty-cells: unset; field-sizing: unset; fill: unset; fill-opacity: unset; fill-rule: unset; filter: unset; flex: unset; flex-flow: unset; flex-line-count: unset; float: unset; flood-color: unset; flood-opacity: unset; grid: unset; grid-area: unset; height: unset; hyphenate-character: unset; hyphenate-limit-chars: unset; hyphens: unset; image-orientation: unset; image-rendering: unset; initial-letter: unset; inline-size: unset; inset-block: unset; inset-inline: unset; interactivity: unset; interest-delay: unset; interpolate-size: unset; isolation: unset; letter-spacing: unset; lighting-color: unset; line-break: unset; list-style: unset; margin-block: unset; margin: unset; margin-inline: unset; marker: unset; mask: unset; mask-type: unset; math-shift: unset; math-style: unset; max-block-size: unset; max-height: unset; max-inline-size: unset; max-width: unset; min-block-size: unset; min-height: unset; min-inline-size: unset; min-width: unset; mix-blend-mode: unset; object-fit: unset; object-position: unset; object-view-box: unset; offset: unset; opacity: unset; order: unset; orphans: unset; outline: unset; outline-offset: unset; overflow-anchor: unset; overflow-block: unset; overflow-clip-margin: unset; overflow-inline: unset; overflow-wrap: unset; overflow: unset; overlay: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; overscroll-behavior: unset; padding-block: unset; padding: unset; padding-inline: unset; page: unset; page-margin-safety: unset; page-orientation: unset; paint-order: unset; perspective: unset; perspective-origin: unset; pointer-events: unset; position-try: unset; position-visibility: unset; print-color-adjust: unset; quotes: unset; r: unset; reading-flow: unset; reading-order: unset; resize: unset; right: unset; rotate: unset; ruby-align: unset; ruby-overhang: unset; ruby-position: unset; rule-overlap: unset; rx: unset; ry: unset; scale: unset; scroll-axis-lock: unset; scroll-behavior: unset; scroll-initial-target: unset; scroll-margin-block: unset; scroll-margin: unset; scroll-margin-inline: unset; scroll-marker-group: unset; scroll-padding-block: unset; scroll-padding: unset; scroll-padding-inline: unset; scroll-snap-align: unset; scroll-snap-stop: unset; scroll-snap-type: unset; scroll-target-group: unset; scroll-timeline: unset; scrollbar-color: unset; scrollbar-gutter: unset; scrollbar-width: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; shape-rendering: unset; size: unset; speak: unset; stop-color: unset; stop-opacity: unset; stroke: unset; stroke-dasharray: unset; stroke-dashoffset: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-width: unset; tab-size: unset; table-layout: unset; text-align: unset; text-align-last: unset; text-anchor: unset; text-autospace: unset; text-box: unset; text-combine-upright: unset; text-decoration: unset; text-decoration-skip-ink: unset; text-emphasis: unset; text-emphasis-position: unset; text-fit: unset; text-indent: unset; text-justify: unset; text-overflow: unset; text-shadow: unset; text-transform: unset; text-underline-offset: unset; text-underline-position: unset; text-wrap: unset; timeline-scope: unset; timeline-trigger: unset; touch-action: unset; transform: unset; transform-box: unset; transform-origin: unset; transform-style: unset; transition: unset; translate: unset; trigger-scope: unset; user-select: unset; vector-effect: unset; vertical-align: unset; view-timeline: unset; view-transition-class: unset; view-transition-group: unset; view-transition-name: unset; view-transition-scope: unset; visibility: unset; border-spacing: unset; -webkit-box-align: unset; -webkit-box-decoration-break: unset; -webkit-box-direction: unset; -webkit-box-flex: unset; -webkit-box-ordinal-group: unset; -webkit-box-orient: unset; -webkit-box-pack: unset; -webkit-box-reflect: unset; -webkit-line-break: unset; -webkit-line-clamp: unset; -webkit-mask-box-image: unset; -webkit-rtl-ordering: unset; -webkit-ruby-position: unset; -webkit-tap-highlight-color: unset; -webkit-text-combine: unset; -webkit-text-decorations-in-effect: unset; -webkit-text-fill-color: unset; -webkit-text-security: unset; -webkit-text-stroke: unset; -webkit-user-drag: unset; white-space-collapse: unset; widows: unset; width: unset; will-change: unset; window-drag: unset; word-break: unset; word-spacing: unset; x: unset; y: unset; z-index: unset; position: absolute; top: 0px; left: 0px;"><div style="color-scheme: unset; forced-color-adjust: unset; math-depth: unset; position-anchor: unset; text-size-adjust: unset; appearance: unset; color: unset; font: unset; font-palette: unset; font-synthesis: unset; position-area: unset; text-orientation: unset; text-rendering: unset; text-spacing-trim: unset; -webkit-font-smoothing: unset; -webkit-locale: unset; -webkit-text-orientation: unset; -webkit-writing-mode: unset; writing-mode: unset; zoom: unset; accent-color: unset; place-content: unset; place-items: unset; place-self: unset; alignment-baseline: unset; anchor-name: unset; anchor-scope: unset; animation-composition: unset; animation: unset; animation-trigger: unset; app-region: unset; aspect-ratio: unset; backdrop-filter: unset; backface-visibility: unset; background: unset; background-blend-mode: unset; baseline-shift: unset; baseline-source: unset; block-size: unset; border-block: unset; border: unset; border-radius: unset; border-collapse: unset; border-end-end-radius: unset; border-end-start-radius: unset; border-inline: unset; border-shape: unset; border-start-end-radius: unset; border-start-start-radius: unset; bottom: unset; box-decoration-break: unset; box-shadow: unset; box-sizing: unset; break-after: unset; break-before: unset; break-inside: unset; buffered-rendering: unset; caption-side: unset; caret-animation: unset; caret-color: unset; caret-shape: unset; clear: unset; clip: unset; clip-path: unset; clip-rule: unset; color-interpolation: unset; color-interpolation-filters: unset; color-rendering: unset; columns: unset; column-fill: unset; gap: unset; rule-break: unset; rule: unset; rule-inset: unset; rule-visibility-items: unset; column-span: unset; contain: unset; contain-intrinsic-block-size: unset; contain-intrinsic-size: unset; contain-intrinsic-inline-size: unset; container: unset; content: unset; content-visibility: unset; corner-shape: unset; corner-block-end-shape: unset; corner-block-start-shape: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; cursor: unset; cx: unset; cy: unset; d: unset; display: unset; dominant-baseline: unset; dynamic-range-limit: unset; empty-cells: unset; field-sizing: unset; fill: unset; fill-opacity: unset; fill-rule: unset; filter: unset; flex: unset; flex-flow: unset; flex-line-count: unset; float: unset; flood-color: unset; flood-opacity: unset; grid: unset; grid-area: unset; height: unset; hyphenate-character: unset; hyphenate-limit-chars: unset; hyphens: unset; image-orientation: unset; image-rendering: unset; initial-letter: unset; inline-size: unset; inset-block: unset; inset-inline: unset; interactivity: unset; interest-delay: unset; interpolate-size: unset; isolation: unset; letter-spacing: unset; lighting-color: unset; line-break: unset; list-style: unset; margin-block: unset; margin: unset; margin-inline: unset; marker: unset; mask: unset; mask-type: unset; math-shift: unset; math-style: unset; max-block-size: unset; max-height: unset; max-inline-size: unset; max-width: unset; min-block-size: unset; min-height: unset; min-inline-size: unset; min-width: unset; mix-blend-mode: unset; object-fit: unset; object-position: unset; object-view-box: unset; offset: unset; opacity: unset; order: unset; orphans: unset; outline: unset; outline-offset: unset; overflow-anchor: unset; overflow-block: unset; overflow-clip-margin: unset; overflow-inline: unset; overflow-wrap: unset; overflow: unset; overlay: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; overscroll-behavior: unset; padding-block: unset; padding: unset; padding-inline: unset; page: unset; page-margin-safety: unset; page-orientation: unset; paint-order: unset; perspective: unset; perspective-origin: unset; pointer-events: unset; position-try: unset; position-visibility: unset; print-color-adjust: unset; quotes: unset; r: unset; reading-flow: unset; reading-order: unset; resize: unset; right: unset; rotate: unset; ruby-align: unset; ruby-overhang: unset; ruby-position: unset; rule-overlap: unset; rx: unset; ry: unset; scale: unset; scroll-axis-lock: unset; scroll-behavior: unset; scroll-initial-target: unset; scroll-margin-block: unset; scroll-margin: unset; scroll-margin-inline: unset; scroll-marker-group: unset; scroll-padding-block: unset; scroll-padding: unset; scroll-padding-inline: unset; scroll-snap-align: unset; scroll-snap-stop: unset; scroll-snap-type: unset; scroll-target-group: unset; scroll-timeline: unset; scrollbar-color: unset; scrollbar-gutter: unset; scrollbar-width: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; shape-rendering: unset; size: unset; speak: unset; stop-color: unset; stop-opacity: unset; stroke: unset; stroke-dasharray: unset; stroke-dashoffset: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-width: unset; tab-size: unset; table-layout: unset; text-align: unset; text-align-last: unset; text-anchor: unset; text-autospace: unset; text-box: unset; text-combine-upright: unset; text-decoration: unset; text-decoration-skip-ink: unset; text-emphasis: unset; text-emphasis-position: unset; text-fit: unset; text-indent: unset; text-justify: unset; text-overflow: unset; text-shadow: unset; text-transform: unset; text-underline-offset: unset; text-underline-position: unset; text-wrap: unset; timeline-scope: unset; timeline-trigger: unset; touch-action: unset; transform: unset; transform-box: unset; transform-origin: unset; transform-style: unset; transition: unset; translate: unset; trigger-scope: unset; user-select: unset; vector-effect: unset; vertical-align: unset; view-timeline: unset; view-transition-class: unset; view-transition-group: unset; view-transition-name: unset; view-transition-scope: unset; visibility: unset; border-spacing: unset; -webkit-box-align: unset; -webkit-box-decoration-break: unset; -webkit-box-direction: unset; -webkit-box-flex: unset; -webkit-box-ordinal-group: unset; -webkit-box-orient: unset; -webkit-box-pack: unset; -webkit-box-reflect: unset; -webkit-line-break: unset; -webkit-line-clamp: unset; -webkit-mask-box-image: unset; -webkit-rtl-ordering: unset; -webkit-ruby-position: unset; -webkit-tap-highlight-color: unset; -webkit-text-combine: unset; -webkit-text-decorations-in-effect: unset; -webkit-text-fill-color: unset; -webkit-text-security: unset; -webkit-text-stroke: unset; -webkit-user-drag: unset; white-space-collapse: unset; widows: unset; width: unset; will-change: unset; window-drag: unset; word-break: unset; word-spacing: unset; x: unset; y: unset; z-index: unset; position: absolute; top: 0px; left: 0px;"></div></div></body></html>
