@@ -6,7 +6,7 @@ config([
     'adminlte.menu' => [
         ['text' => 'Mi Agenda', 'url' => route('staff.dashboard'), 'icon' => 'bi bi-calendar3'],
         ['text' => 'Consultas', 'url' => route('staff.dashboard'), 'icon' => 'bi bi-chat-left-text'],
-        ['text' => 'Cliente Ejecutivo', 'url' => route('staff.dashboard'), 'icon' => 'bi bi-people'],
+        ['text' => 'Mis Casos', 'url' => route('staff.procesos.index'), 'icon' => 'bi bi-briefcase'],
     ],
 ]);
 @endphp

@@ -60,6 +60,24 @@ class Proceso extends Model
         return $this->hasMany(DocumentoSolicitud::class);
     }
 
+    public function etapas(): HasMany
+    {
+        return $this->hasMany(ProcesoEtapa::class);
+    }
+
+    /**
+     * Última etapa que el abogado registró para el caso. Usa la colección ya
+     * cargada cuando `etapas` viene eager-loaded (evita N+1 en listados).
+     */
+    public function etapaActual(): ?ProcesoEtapa
+    {
+        if ($this->relationLoaded('etapas')) {
+            return $this->etapas->sortByDesc('created_at')->first();
+        }
+
+        return $this->etapas()->latest()->first();
+    }
+
     /**
      * Línea de tiempo unificada del caso: consulta de origen, conversión a
      * cliente, agendas y documentos, ordenados cronológicamente.
@@ -105,6 +123,14 @@ class Proceso extends Model
                 'fecha' => $documento->created_at,
                 'tipo' => 'documento',
                 'descripcion' => 'Documento subido: '.$documento->nombre,
+            ]);
+        }
+
+        foreach ($this->etapas as $etapa) {
+            $eventos->push([
+                'fecha' => $etapa->created_at,
+                'tipo' => 'etapa',
+                'descripcion' => 'Etapa actualizada: '.$etapa->etapa,
             ]);
         }
 

@@ -31,6 +31,41 @@
             </div>
 
             <div class="card">
+                <div class="card-header"><h3 class="card-title">Etapa del proceso</h3></div>
+                <div class="card-body">
+                    @php $etapaActual = $proceso->etapaActual(); @endphp
+                    @if ($etapaActual)
+                        <p class="mb-1">
+                            <span class="badge text-bg-primary fs-6">{{ $etapaActual->etapa }}</span>
+                        </p>
+                        <p class="text-muted mb-0">
+                            Informado por {{ $etapaActual->personal?->nombre }} {{ $etapaActual->personal?->apellidos }}
+                            el {{ $etapaActual->created_at->format('d/m/Y H:i') }}
+                        </p>
+                        @if ($etapaActual->comentario)
+                            <p class="mb-0 mt-2">{{ $etapaActual->comentario }}</p>
+                        @endif
+                    @else
+                        <p class="text-muted mb-0">El abogado todavía no informó una etapa para este caso.</p>
+                    @endif
+
+                    @if ($proceso->etapas->count() > 1)
+                        <hr>
+                        <p class="fw-semibold mb-2">Historial</p>
+                        <ul class="list-unstyled mb-0">
+                            @foreach ($proceso->etapas->sortByDesc('created_at')->skip(1) as $etapa)
+                                <li class="mb-2 text-muted">
+                                    <strong>{{ $etapa->created_at->format('d/m/Y H:i') }}</strong>
+                                    — {{ $etapa->etapa }}
+                                    ({{ $etapa->personal?->nombre }} {{ $etapa->personal?->apellidos }})
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </div>
+            </div>
+
+            <div class="card">
                 <div class="card-header"><h3 class="card-title">Línea de tiempo</h3></div>
                 <div class="card-body">
                     <ul class="list-unstyled mb-0">

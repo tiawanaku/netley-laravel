@@ -14,7 +14,7 @@ class DashboardController extends Controller
 
         return view('portal.dashboard', [
             'cliente' => $cliente,
-            'procesos' => $cliente->procesos()->with('finanza', 'abogado')->get(),
+            'procesos' => $cliente->procesos()->with('finanza', 'abogado', 'etapas')->get(),
         ]);
     }
 }

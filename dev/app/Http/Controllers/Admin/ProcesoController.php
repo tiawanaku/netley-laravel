@@ -65,7 +65,7 @@ class ProcesoController extends Controller
 
     public function show(Proceso $proceso): View
     {
-        $proceso->load(['cliente', 'materiaLegal', 'abogado', 'finanza.cuotas', 'agendas', 'documentos']);
+        $proceso->load(['cliente', 'materiaLegal', 'abogado', 'finanza.cuotas', 'agendas', 'documentos', 'etapas.personal']);
 
         return view('admin.procesos.show', [
             'proceso' => $proceso,

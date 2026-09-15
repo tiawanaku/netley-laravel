@@ -3,6 +3,7 @@
 use App\Http\Controllers\Staff\Auth\LoginController;
 use App\Http\Controllers\Staff\DashboardController;
 use App\Http\Controllers\Staff\PasswordController;
+use App\Http\Controllers\Staff\ProcesoController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('staff')->name('staff.')->group(function () {
@@ -19,6 +20,11 @@ Route::prefix('staff')->name('staff.')->group(function () {
 
         Route::middleware('personal.password')->group(function () {
             Route::get('/', DashboardController::class)->name('dashboard');
+            Route::get('agenda/eventos', [DashboardController::class, 'eventos'])->name('agenda.eventos');
+
+            Route::get('casos', [ProcesoController::class, 'index'])->name('procesos.index');
+            Route::get('casos/{proceso}', [ProcesoController::class, 'show'])->name('procesos.show');
+            Route::post('casos/{proceso}/etapa', [ProcesoController::class, 'agregarEtapa'])->name('procesos.etapa.store');
         });
     });
 });
