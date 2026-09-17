@@ -65,7 +65,10 @@ class ProcesoController extends Controller
 
     public function show(Proceso $proceso): View
     {
-        $proceso->load(['cliente', 'materiaLegal', 'abogado', 'finanza.cuotas', 'agendas', 'documentos', 'etapas.personal']);
+        $proceso->load([
+            'cliente', 'materiaLegal', 'abogado', 'finanza.cuotas', 'agendas', 'documentos',
+            'etapas.personal', 'recibos', 'gastos',
+        ]);
 
         return view('admin.procesos.show', [
             'proceso' => $proceso,
@@ -114,5 +117,14 @@ class ProcesoController extends Controller
         $proceso->finanza->generarPlanPagos((int) $data['cuotas'], \Carbon\Carbon::parse($data['fecha_primera_cuota']));
 
         return redirect()->route('admin.procesos.show', $proceso)->with('status', 'Plan de pagos generado correctamente.');
+    }
+
+    public function confirmarAnticipo(Proceso $proceso): RedirectResponse
+    {
+        if (! $proceso->finanza->anticipo_confirmado_en) {
+            $proceso->finanza->confirmarAnticipo();
+        }
+
+        return redirect()->route('admin.procesos.show', $proceso)->with('status', 'Anticipo confirmado y recibo emitido.');
     }
 }

@@ -65,6 +65,16 @@ class Proceso extends Model
         return $this->hasMany(ProcesoEtapa::class);
     }
 
+    public function recibos(): HasMany
+    {
+        return $this->hasMany(Recibo::class);
+    }
+
+    public function gastos(): HasMany
+    {
+        return $this->hasMany(Gasto::class);
+    }
+
     /**
      * Última etapa que el abogado registró para el caso. Usa la colección ya
      * cargada cuando `etapas` viene eager-loaded (evita N+1 en listados).
@@ -131,6 +141,14 @@ class Proceso extends Model
                 'fecha' => $etapa->created_at,
                 'tipo' => 'etapa',
                 'descripcion' => 'Etapa actualizada: '.$etapa->etapa,
+            ]);
+        }
+
+        foreach ($this->gastos as $gasto) {
+            $eventos->push([
+                'fecha' => $gasto->created_at,
+                'tipo' => 'gasto',
+                'descripcion' => 'Gasto registrado: '.$gasto->categoria->label().' — Bs. '.number_format((float) $gasto->monto, 2),
             ]);
         }
 

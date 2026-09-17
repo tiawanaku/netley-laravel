@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\EstadoPago;
+use App\Enums\TipoRecibo;
 use Endroid\QrCode\Builder\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -87,5 +88,18 @@ class PlanPago extends Model
         $this->estado = EstadoPago::Pagado;
         $this->pagado_en = now();
         $this->save();
+
+        $numeroCuota = $this->finanza->cuotas()->orderBy('fecha')->pluck('id')->search($this->id) + 1;
+
+        Recibo::create([
+            'fecha' => now()->toDateString(),
+            'monto' => $this->monto,
+            'concepto' => "Cuota #{$numeroCuota} — {$this->finanza->proceso->tipo_proceso}",
+            'tipo' => TipoRecibo::CuotaPago,
+            'proceso_id' => $this->finanza->proceso_id,
+            'cliente_id' => $this->finanza->proceso->cliente_id,
+            'plan_pago_id' => $this->id,
+            'user_id' => auth('web')->id(),
+        ]);
     }
 }

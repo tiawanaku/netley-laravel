@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\TipoPago;
+use App\Enums\TipoRecibo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -77,9 +78,28 @@ class Finanza extends Model
         }
     }
 
+    public function recibos(): HasMany
+    {
+        return $this->hasMany(Recibo::class, 'proceso_id', 'proceso_id');
+    }
+
+    /**
+     * Confirma el anticipo y emite el recibo correspondiente — la
+     * contraparte de PlanPago::confirmarPago() para el pago inicial.
+     */
     public function confirmarAnticipo(): void
     {
         $this->anticipo_confirmado_en = now();
         $this->save();
+
+        Recibo::create([
+            'fecha' => now()->toDateString(),
+            'monto' => $this->anticipo,
+            'concepto' => 'Anticipo — '.$this->proceso->tipo_proceso,
+            'tipo' => TipoRecibo::Anticipo,
+            'proceso_id' => $this->proceso_id,
+            'cliente_id' => $this->proceso->cliente_id,
+            'user_id' => auth('web')->id(),
+        ]);
     }
 }

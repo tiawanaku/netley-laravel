@@ -5,10 +5,13 @@ use App\Http\Controllers\Admin\Catalogos\CatalogoController;
 use App\Http\Controllers\Admin\ClienteController;
 use App\Http\Controllers\Admin\ConsultaController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FinanzasController;
+use App\Http\Controllers\Admin\GastoController;
 use App\Http\Controllers\Admin\PersonalController;
 use App\Http\Controllers\Admin\PlanPagoController;
 use App\Http\Controllers\Admin\ProcesoController;
 use App\Http\Controllers\Admin\ProcesoDocumentoController;
+use App\Http\Controllers\Admin\ReciboController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -51,6 +54,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('casos/{proceso}', [ProcesoController::class, 'update'])->name('procesos.update');
         Route::post('casos/{proceso}/plan-pagos', [ProcesoController::class, 'generarPlanPagos'])
             ->name('procesos.generar-plan-pagos');
+        Route::post('casos/{proceso}/confirmar-anticipo', [ProcesoController::class, 'confirmarAnticipo'])
+            ->name('procesos.confirmar-anticipo');
 
         Route::post('casos/{proceso}/documentos', [ProcesoDocumentoController::class, 'store'])
             ->name('procesos.documentos.store');
@@ -61,6 +66,22 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::post('cuotas/{planPago}/confirmar', [PlanPagoController::class, 'confirmar'])
             ->name('plan-pagos.confirmar');
+
+        Route::prefix('finanzas')->name('finanzas.')->group(function () {
+            Route::get('/', [FinanzasController::class, 'index'])->name('index');
+
+            Route::get('recibos', [ReciboController::class, 'index'])->name('recibos.index');
+            Route::get('recibos/crear', [ReciboController::class, 'create'])->name('recibos.create');
+            Route::post('recibos', [ReciboController::class, 'store'])->name('recibos.store');
+            Route::get('recibos/{recibo}', [ReciboController::class, 'show'])->name('recibos.show');
+
+            Route::get('gastos', [GastoController::class, 'index'])->name('gastos.index');
+            Route::get('gastos/crear', [GastoController::class, 'create'])->name('gastos.create');
+            Route::post('gastos', [GastoController::class, 'store'])->name('gastos.store');
+            Route::get('gastos/{gasto}/comprobante', [GastoController::class, 'descargarComprobante'])
+                ->name('gastos.comprobante');
+            Route::delete('gastos/{gasto}', [GastoController::class, 'destroy'])->name('gastos.destroy');
+        });
 
         Route::prefix('catalogos/{catalogo}')->name('catalogos.')->group(function () {
             Route::get('/', [CatalogoController::class, 'index'])->name('index');

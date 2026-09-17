@@ -9,6 +9,10 @@ config([
         ['text' => 'Consultas', 'url' => route('admin.consultas.index'), 'icon' => 'bi bi-chat-left-text'],
         ['text' => 'Cliente Ejecutivo', 'url' => route('admin.clientes.index'), 'icon' => 'bi bi-people'],
         ['text' => 'Agenda', 'url' => route('admin.dashboard'), 'icon' => 'bi bi-calendar3'],
+        ['header' => 'Finanzas'],
+        ['text' => 'Resumen', 'url' => route('admin.finanzas.index'), 'icon' => 'bi bi-graph-up'],
+        ['text' => 'Recibos', 'url' => route('admin.finanzas.recibos.index'), 'icon' => 'bi bi-receipt'],
+        ['text' => 'Gastos', 'url' => route('admin.finanzas.gastos.index'), 'icon' => 'bi bi-cash-coin'],
         ['header' => 'Administración'],
         ['text' => 'Personal', 'url' => route('admin.personal.index'), 'icon' => 'bi bi-person-badge'],
         [

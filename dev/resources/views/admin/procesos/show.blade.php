@@ -91,8 +91,68 @@
                             <dt class="col-4">Tipo de pago</dt>
                             <dd class="col-8">{{ $proceso->finanza->tipo_pago->label() }}</dd>
                             <dt class="col-4">Anticipo</dt>
-                            <dd class="col-8">Bs. {{ number_format($proceso->finanza->anticipo, 2) }}</dd>
+                            <dd class="col-8">
+                                Bs. {{ number_format($proceso->finanza->anticipo, 2) }}
+                                @if ($proceso->finanza->anticipo > 0)
+                                    @if ($proceso->finanza->anticipo_confirmado_en)
+                                        <span class="badge text-bg-success">Confirmado</span>
+                                    @else
+                                        <form action="{{ route('admin.procesos.confirmar-anticipo', $proceso) }}" method="POST" class="d-inline"
+                                            onsubmit="return confirm('¿Confirmar el anticipo y emitir el recibo?');">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-outline-success">Confirmar anticipo</button>
+                                        </form>
+                                    @endif
+                                @endif
+                            </dd>
                         </dl>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="card-title">Recibos emitidos</h3>
+                        <a href="{{ route('admin.finanzas.recibos.create') }}" class="btn btn-sm btn-outline-primary">Registrar otro</a>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-sm mb-0">
+                            <thead><tr><th>N°</th><th>Fecha</th><th>Concepto</th><th class="text-end">Monto</th></tr></thead>
+                            <tbody>
+                                @forelse ($proceso->recibos->sortByDesc('fecha') as $recibo)
+                                    <tr>
+                                        <td><a href="{{ route('admin.finanzas.recibos.show', $recibo) }}">{{ $recibo->numero }}</a></td>
+                                        <td>{{ $recibo->fecha->format('d/m/Y') }}</td>
+                                        <td>{{ $recibo->concepto }}</td>
+                                        <td class="text-end">Bs. {{ number_format((float) $recibo->monto, 2) }}</td>
+                                    </tr>
+                                @empty
+                                    <tr><td colspan="4" class="text-center text-muted py-3">Sin recibos todavía.</td></tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="card-title">Gastos del caso</h3>
+                        <a href="{{ route('admin.finanzas.gastos.create') }}" class="btn btn-sm btn-outline-primary">Registrar gasto</a>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-sm mb-0">
+                            <thead><tr><th>Fecha</th><th>Categoría</th><th class="text-end">Monto</th></tr></thead>
+                            <tbody>
+                                @forelse ($proceso->gastos->sortByDesc('fecha') as $gasto)
+                                    <tr>
+                                        <td>{{ $gasto->fecha->format('d/m/Y') }}</td>
+                                        <td>{{ $gasto->categoria->label() }}</td>
+                                        <td class="text-end">Bs. {{ number_format((float) $gasto->monto, 2) }}</td>
+                                    </tr>
+                                @empty
+                                    <tr><td colspan="3" class="text-center text-muted py-3">Sin gastos registrados para este caso.</td></tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
