@@ -49,12 +49,28 @@ Fuente: `database/seeders/PersonalSeeder.php`.
 
 Guard `clientes`, modelo `Cliente`. Login por **usuario** (no email).
 
-**No hay seeder para `Cliente`** — no existe ningún cliente de prueba precargado. Para probar este panel hay que crear uno manualmente desde el panel Admin, de dos formas:
+**No hay seeder para `Cliente`** — no existe ningún cliente de prueba precargado por defecto. Para probar este panel hay que crear uno manualmente desde el panel Admin, de dos formas:
 
 1. **Alta directa**: Admin → Clientes → Nuevo (crea Cliente + Proceso + Finanza en una sola operación).
 2. **Conversión de una Consulta**: Admin → Consultas → agendar cita → dar respuesta → "Convertir a cliente".
 
 En ambos casos el sistema autogenera `usuario` (a partir del teléfono) y una contraseña temporal, que el controlador muestra **una sola vez** en un mensaje flash tras la creación — hay que capturarla en ese momento porque no queda visible después (no hay endpoint de "olvidé mi contraseña" para este guard).
+
+### Cliente de prueba ya creado (16/09/2026)
+
+Se creó vía "Alta directa" para poder probar el portal sin pasos manuales. Credenciales verificadas — inicio de sesión probado en el navegador:
+
+| Campo | Valor |
+|---|---|
+| Usuario | `65432100` |
+| Password | `9Jd\|So_t_g` |
+| Nombre | Usuario De Prueba |
+| Teléfono | 65432100 |
+| Caso | Divorcio de mutuo acuerdo (Civil) |
+| Abogado asignado | Laura Rojas Mamani |
+| Costo del caso | Bs. 3,000.00 |
+
+Este cliente ya tiene una etapa de proceso registrada ("Trámite inicial") para que se vea el flujo completo de principio a fin: el abogado la informó desde el panel Staff (`staff/casos/3`) y se refleja tanto en Admin (`admin/casos/3`) como en este portal.
 
 ## Notas
 
