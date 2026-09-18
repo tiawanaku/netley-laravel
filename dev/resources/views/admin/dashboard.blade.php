@@ -78,20 +78,6 @@
             <div id="calendario-agenda"></div>
         </div>
     </div>
-
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Netley — Panel Admin</h3>
-        </div>
-        <div class="card-body">
-            <p>Sesión iniciada como <strong>{{ auth('web')->user()->name }}</strong>.</p>
-            <p class="text-muted mb-0">
-                Esqueleto inicial del proyecto (guard <code>web</code>, sin FilamentPHP, sobre AdminLTE).
-                Los módulos de Consultas, Cliente Ejecutivo, Procesos, Agenda, Personal y Catálogos
-                se construyen sobre esta base.
-            </p>
-        </div>
-    </div>
 @stop
 
 @push('css')
