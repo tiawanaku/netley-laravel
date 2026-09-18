@@ -37,7 +37,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 4',
+    'title' => 'Netley',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -77,12 +77,12 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
-    'logo_img' => 'vendor/adminlte/dist/assets/img/AdminLTELogo.png',
-    'logo_img_class' => 'brand-image opacity-75 shadow',
-    'logo_img_xl' => null,
-    'logo_img_xl_class' => 'brand-image-xs opacity-75',
-    'logo_img_alt' => 'Admin Logo',
+    'logo' => '',
+    'logo_img' => 'img/netley-icon.png',
+    'logo_img_class' => 'brand-image',
+    'logo_img_xl' => 'img/netley-logo-horizontal.png',
+    'logo_img_xl_class' => 'brand-image-xs',
+    'logo_img_alt' => 'Netley',
 
     /*
     |--------------------------------------------------------------------------
@@ -98,13 +98,13 @@ return [
     */
 
     'auth_logo' => [
-        'enabled' => false,
+        'enabled' => true,
         'img' => [
-            'path' => 'vendor/adminlte/dist/assets/img/AdminLTELogo.png',
-            'alt' => 'Auth Logo',
+            'path' => 'img/netley-logo-full.png',
+            'alt' => 'Netley',
             'class' => '',
-            'width' => 50,
-            'height' => 50,
+            'width' => 220,
+            'height' => 170,
         ],
     ],
 
@@ -136,8 +136,8 @@ return [
         'enabled' => true,
         'mode' => 'fullscreen',
         'img' => [
-            'path' => 'vendor/adminlte/dist/assets/img/AdminLTELogo.png',
-            'alt' => 'AdminLTE Preloader Image',
+            'path' => 'img/netley-icon.png',
+            'alt' => 'Netley',
             'effect' => 'animation__shake',
             'width' => 60,
             'height' => 60,
