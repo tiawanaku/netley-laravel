@@ -30,6 +30,53 @@
                 </div>
             </div>
 
+            @if ($proceso->ficha)
+                <div class="card">
+                    <div class="card-header"><h3 class="card-title">Ficha del caso</h3></div>
+                    <div class="card-body">
+                        <dl class="row mb-0">
+                            <dt class="col-5">N° de caso / expediente</dt>
+                            <dd class="col-7">{{ $proceso->ficha->numero_caso ?? '—' }}</dd>
+                            <dt class="col-5">Denunciante / demandante</dt>
+                            <dd class="col-7">{{ $proceso->ficha->denunciante ?? '—' }}</dd>
+                            <dt class="col-5">Denunciado / demandado</dt>
+                            <dd class="col-7">{{ $proceso->ficha->denunciado ?? '—' }}</dd>
+                            <dt class="col-5">Fecha de inicio</dt>
+                            <dd class="col-7">{{ $proceso->ficha->fecha_inicio_caso?->format('d/m/Y') ?? '—' }}</dd>
+                            <dt class="col-5">Fecha de finalización</dt>
+                            <dd class="col-7">{{ $proceso->ficha->fecha_finalizacion?->format('d/m/Y') ?? '—' }}</dd>
+                            <dt class="col-5">Resultado</dt>
+                            <dd class="col-7">{{ $proceso->ficha->resultado ?? '—' }}</dd>
+                        </dl>
+                        <p class="text-muted small mb-0 mt-2">
+                            Actualizado por {{ $proceso->ficha->actualizadoPor?->nombre }} {{ $proceso->ficha->actualizadoPor?->apellidos }}
+                            el {{ $proceso->ficha->updated_at->format('d/m/Y H:i') }}. Se completa desde el panel Staff.
+                        </p>
+                    </div>
+                </div>
+            @endif
+
+            @if ($proceso->gestionesExtrajudiciales->isNotEmpty())
+                <div class="card">
+                    <div class="card-header"><h3 class="card-title">Gestiones extrajudiciales</h3></div>
+                    <div class="card-body p-0">
+                        <table class="table table-sm mb-0">
+                            <thead><tr><th>Fecha</th><th>Motivo</th><th>Devolución</th><th>Registrado por</th></tr></thead>
+                            <tbody>
+                                @foreach ($proceso->gestionesExtrajudiciales->sortByDesc('created_at') as $gestion)
+                                    <tr>
+                                        <td>{{ $gestion->fecha?->format('d/m/Y') ?? '—' }}</td>
+                                        <td>{{ $gestion->motivo ?? '—' }}</td>
+                                        <td>{{ $gestion->fecha_devolucion?->format('d/m/Y') ?? '—' }}</td>
+                                        <td>{{ $gestion->personal?->nombre }} {{ $gestion->personal?->apellidos }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @endif
+
             <div class="card">
                 <div class="card-header"><h3 class="card-title">Etapa del proceso</h3></div>
                 <div class="card-body">

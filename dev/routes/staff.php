@@ -25,6 +25,8 @@ Route::prefix('staff')->name('staff.')->group(function () {
             Route::get('casos', [ProcesoController::class, 'index'])->name('procesos.index');
             Route::get('casos/{proceso}', [ProcesoController::class, 'show'])->name('procesos.show');
             Route::post('casos/{proceso}/etapa', [ProcesoController::class, 'agregarEtapa'])->name('procesos.etapa.store');
+            Route::put('casos/{proceso}/ficha', [ProcesoController::class, 'actualizarFicha'])->name('procesos.ficha.update');
+            Route::post('casos/{proceso}/gestion-extrajudicial', [ProcesoController::class, 'agregarGestion'])->name('procesos.gestion.store');
         });
     });
 });

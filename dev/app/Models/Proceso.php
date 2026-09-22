@@ -75,6 +75,16 @@ class Proceso extends Model
         return $this->hasMany(Gasto::class);
     }
 
+    public function ficha(): HasOne
+    {
+        return $this->hasOne(ProcesoFicha::class);
+    }
+
+    public function gestionesExtrajudiciales(): HasMany
+    {
+        return $this->hasMany(GestionExtrajudicial::class);
+    }
+
     /**
      * Última etapa que el abogado registró para el caso. Usa la colección ya
      * cargada cuando `etapas` viene eager-loaded (evita N+1 en listados).

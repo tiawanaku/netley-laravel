@@ -67,7 +67,7 @@ class ProcesoController extends Controller
     {
         $proceso->load([
             'cliente', 'materiaLegal', 'abogado', 'finanza.cuotas', 'agendas', 'documentos',
-            'etapas.personal', 'recibos', 'gastos',
+            'etapas.personal', 'recibos', 'gastos', 'ficha.actualizadoPor', 'gestionesExtrajudiciales.personal',
         ]);
 
         return view('admin.procesos.show', [
